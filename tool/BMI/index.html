@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
+    <script src="../../js/ForbidView.js"></script>
+    <title>BMI 计算器</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>BMI 计算器</h1>
+        <div class="form-group">
+            <label for="height">身高 (厘米)</label>
+            <input type="number" id="height" placeholder="请输入身高" min="50" max="250" step="0.1" required>
+            <div class="error-message" id="height-error"></div>
+        </div>
+        <div class="form-group">
+            <label for="weight">体重 (公斤)</label>
+            <input type="number" id="weight" placeholder="请输入体重" min="20" max="300" step="0.1" required>
+            <div class="error-message" id="weight-error"></div>
+        </div>
+        <div class="result" id="result">
+            <div class="bmi-value">您的 BMI 值：<span id="bmi-number"></span></div>
+            <div class="bmi-category" id="bmi-category"></div>
+            <div class="bmi-info" id="bmi-info"></div>
+        </div>
+    </div>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
