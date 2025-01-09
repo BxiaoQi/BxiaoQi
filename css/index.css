@@ -1,54 +1,278 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
+	/* 页面初始化  清除元素原有的内外边距 */
+	padding: 0;
+	margin: 0;
 }
 
+.navbar {
+	/* 相对定位 */
+	position: fixed;
+	width: 70px;
+	z-index: 100;
+	/* 设置初始宽度 */
+	transition: width 0.5s;
+	/* 添加过渡效果 */
+}
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
+	overflow: hidden;
 }
 
-.container {
-    text-align: center;
+.navbar input {
+	/* 隐藏元素 */
+	display: none;
 }
 
-.tool-button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    border: 2px solid transparent; /* 新增：增加按钮边框 */
+/* 顶部栏 */
+.navbar .topcolumn {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: fixed;
+	left: 70px;
+	height: 43px;
+	background-color: #fff;
+	width: calc(100% - 75px);
+	transition: all 0.5s;
 }
 
-.tool-button:hover {
-    background-color: #0056b3;
-    border-color: #0056b3; /* 新增：增加悬停时的边框颜色 */
+/* 展开样式 */
+.navbar input:checked+.topcolumn {
+	left: 200px;
+	width: calc(100% - 205px);
+}
+
+.navbar .topcolumn .menuicon {
+	display: inline-block;
+	width: 43px;
+	height: 43px;
+	background-image: url(../images/icon/菜单.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 70% 70%;
+}
+
+.navbar input:checked+.topcolumn .menuicon {
+	background-image: url(../images/icon/菜单1.png);
+}
+
+.topcolumn .logo {
+	margin-right: 15px;
+}
+
+.topcolumn .logo img {
+	height: 36px;
+}
+
+/* 左侧菜单样式 */
+.navbar ul {
+	position: relative;
+	overflow: hidden;
+	list-style: none;
+	width: 70px;
+	height: 100vh;
+	padding-top: 10px;
+	background-color: #2a3f54;
+	transition: all 0.5s;
+}
+
+/* 菜单按钮选中时左侧菜单样式 */
+.navbar input:checked~ul {
+	width: 200px;
+}
+
+/* 左侧选项样式 */
+.navbar ul li {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	margin-bottom: 10px;
+	cursor: pointer;
+	transition: all 0.5s;
+	align-items: center;
+	justify-content: center;
+}
+
+.navbar ul li:last-child {
+	position: absolute;
+	width: 100%;
+	bottom: 10px;
+}
+
+.navbar ul li:first-child:hover {
+	background-color: #2a3f54;
+}
+
+.navbar ul li:hover {
+	background-color: #9bceff;
+}
+
+.navbar input:checked~ul li {
+	display: flex;
+}
+
+/* 头像栏样式 */
+.navbar ul li:first-child {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 10px;
+}
+
+/* 左侧菜单展开时头像栏样式 */
+.navbar input:checked~ul li:first-child {
+	justify-content: flex-start;
+}
+
+/* 头像样式 */
+.navbar ul li:first-child img {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+
+/* 头像栏文字样式 */
+.navbar ul li:first-child span {
+	display: none;
+	color: #fff;
+	white-space: nowrap;
+	padding-left: 10px;
+}
+
+/* 展开时显示头像栏文字 */
+.navbar input:checked~ul li:first-child span {
+	display: block;
+}
+
+.navbar ul li img {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+
+.navbar input:checked~ul li:first-child img {
+	display: inline-block;
+}
+
+.navbar ul li a {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	/* width: 100%; */
+	height: 100%;
+	color: #ffffff;
+	text-decoration: none;
+	text-align: center;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.navbar input:checked~ul li a {
+	display: flex;
+	font-size: 16px;
+	margin-left: 20px;
+}
+
+
+.content {
+	position: absolute;
+	width: 95%;
+	top: 43px;
+	left: 70px;
+	padding: 10px;
+	overflow-y: auto;
+	transition: left 0.5s;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.content table {
+	/* width: 100%; */
+	border-collapse: collapse;
+	text-align: left;
+	margin: 0 auto;
+	font-size: 18px;
+	display: block;
+	overflow-y: auto;
+	/* 使表格内容可以滚动 */
+	height: calc(100vh - 115px);
+}
+
+.content table tbody {
+	width: 100%;
+}
+
+.content th,
+.content td {
+	padding: 12px;
+	border-bottom: 1px solid #ddd;
+}
+
+
+.content th {
+	background-color: #f4f4f4;
+	color: #333;
+}
+
+.content tr:hover {
+	background-color: #cfcfcf;
+}
+
+.content tr {
+	height: 70px;
+}
+
+.content tr td {
+	border: 1px solid #ddd;
+}
+
+/* 图标 */
+.content tr td:nth-of-type(1) {
+	text-align: center;
+	width: 5%;
+}
+
+/* 图片 */
+.content tr td:nth-of-type(1) img {
+	height: 100%;
+}
+
+/* 标题 */
+.content tr td:nth-of-type(2) {
+	width: 15%;
+}
+
+/* 描述 */
+.content tr td:nth-of-type(3) {
+	width: 70%;
+}
+
+/* 操作 */
+.content tr td:nth-of-type(4) {
+	width: 10%;
+	text-align: center;
+}
+
+.content tr td:nth-of-type(4) a {
+	padding: 5px 10px;
+	background-color: #0059ff86;
+	color: #000;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	margin-right: 10px;
+	text-decoration: none;
+}
+
+.content tr td:nth-of-type(4) a:hover {
+	background-color: #6e3aff;
+	color: #fff;
 }
 
 .title {
-    font-size: 3.5em; /* 修改：增加字体大小 */
-    margin-top: 20px;
-    margin-bottom: 30px;
-    color: #3498db; /* 修改：调整颜色 */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-footer {
-    background-color: #2c3e50;
-    color: white;
-    text-align: center;
-    padding: 15px 0; /* 修改：增加内边距 */
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+	margin-bottom: 20px;
 }

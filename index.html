@@ -1,23 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="./js/ForbidView.js"></script> -->
     <link rel="stylesheet" href="./css/index.css">
-    <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
-    <title>北小齐工具箱</title>
+    <script src="./js/data.js"></script>
+    <title>北小齐珍藏</title>
 </head>
 
 <body>
-    <div class="container">
-        <h1 class="title">欢迎使用北小齐工具箱</h1>
-        <a id="btn" href="./tool/BMI/index.html" class="tool-button" target="_blank">BMI计算器</a>
-        <footer>
-            <p>&copy; 2025 北小齐工具箱</p>
-        </footer>
+    <div class="navbar">
+        <input type="checkbox" id="menuSwitch">
+        <div class="topcolumn">
+            <a class="menuicon" href="javascript:expand()"></a>
+            <a href="" class="logo"><img src="./images/logo.png" alt=""></a>
+        </div>
+        <ul>
+            <li title="首页" onclick="show('all')">
+                <img src="./images/userAvatar/tourist.png" alt="" id="avatar">
+                <span id="username"></span>
+            </li>
+            <li title="在线工具" onclick="show('tools')">
+                <img src="./images/icon/在线工具.png" alt=""></img>
+                <a href="javascript:show('tools')"> 在线工具 </a>
+            </li>
+            <li title="在线影视" onclick="show('video')">
+                <img src="./images/icon/视频.png" alt=""></img>
+                <a href="javascript:show('video')"> 在线影视 </a>
+            </li>
+            <li title="在线音乐" onclick="show('music')">
+                <img src="./images/icon/音乐.png" alt=""></img>
+                <a href="javascript:show('music')"> 在线音乐 </a>
+            </li>
+            <li title="实用程序" onclick="show('progm')">
+                <img src="./images/icon/主程序.png" alt=""></img>
+                <a href="javascript:show('progm')"> 实用程序 </a>
+            </li>
+            <li title="隐藏功能" onclick="hides()">
+                <img src="./images/icon/锁.png" alt=""></img>
+                <a href="javascript:hides()"> 隐藏功能 </a>
+            </li>
+            <li onclick="login()">
+                <img src="" alt="" id="loginIcon"></img>
+                <a href="javascript:login()" id="loginText"></a>
+            </li>
+        </ul>
     </div>
-    <script src="./js/ForbidView.js"></script>
+
+    <div class="content" id="content">
+        <div class="title">
+            <h1 id="titlename">北小齐工具箱</h1>
+        </div>
+        <table>
+            <tbody id="tbody">
+                <!-- 待拼接区 -->
+            </tbody>
+        </table>
+    </div>
+
     <script src="./js/index.js"></script>
 </body>
 
