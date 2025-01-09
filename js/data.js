@@ -28,35 +28,35 @@ var data = {
         name: "在线工具",
         data: [
             { ico: "./images/appicon/icon.png", name: "BMI计算器", src: "./tool/BMI/index.html", desc: "计算体质指数检测你是否是真的胖（结果数据由世界卫生组织定制）", permiss: 0 },
-            { ico: "./images/appicon/icon.png", name: "项目2", src: "操作2", desc: "描述2", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "项目2", src: "#", desc: "描述2", permiss: 1 },
         ]
     },
     video: {
         name: "在线影视",
         data: [
-            { ico: "./images/appicon/icon.png", name: "项目3", src: "操作3", desc: "描述3", permiss: 0 },
-            { ico: "./images/appicon/icon.png", name: "项目4", src: "操作4", desc: "描述4", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "项目3", src: "#", desc: "描述3", permiss: 0 },
+            { ico: "./images/appicon/icon.png", name: "项目4", src: "#", desc: "描述4", permiss: 1 },
         ]
     },
     music: {
         name: "在线音乐",
         data: [
-            { ico: "./images/appicon/icon.png", name: "项目5", src: "操作5", desc: "描述5", permiss: 0 },
-            { ico: "./images/appicon/icon.png", name: "项目6", src: "操作6", desc: "描述6", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "项目5", src: "#", desc: "描述5", permiss: 0 },
+            { ico: "./images/appicon/icon.png", name: "项目6", src: "#", desc: "描述6", permiss: 1 },
         ]
     },
     progm: {
         name: "实用程序",
         data: [
-            { ico: "./images/appicon/icon.png", name: "项目7", src: "操作7", desc: "描述7", permiss: 1 },
-            { ico: "./images/appicon/icon.png", name: "项目8", src: "操作8", desc: "描述8", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "项目7", src: "#", desc: "描述7", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "项目8", src: "#", desc: "描述8", permiss: 1 },
         ]
     },
     hides: {
         name: "隐藏功能",
         data: [
-            { ico: "./images/appicon/icon.png", name: "项目9", src: "操作9", desc: "描述9", permiss: 2 },
-            { ico: "./images/appicon/icon.png", name: "项目10", src: "操作10", desc: "描述10", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "项目9", src: "#", desc: "描述9", permiss: 2 },
+            { ico: "./images/appicon/icon.png", name: "项目10", src: "#", desc: "描述10", permiss: 1 },
         ]
     }
 }
