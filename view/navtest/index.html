@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./js/Utils.js"></script>
+    <title>侧边展开导航栏(半隐藏)</title>
+</head>
+
+<body>
+    <div class="navbar">
+        <input type="checkbox" id="menuSwitch">
+        <div class="topcolumn">
+            <a class="menuicon" href="javascript:expand()"></a>
+        </div>
+        <ul>
+            <li>
+                <img src="./images/TX_1.png" alt="">
+                <span>北小齐 欢迎您！</span>
+            </li>
+            <li>
+                <a href="javascript:show('tools')">
+                    <span>在线工具</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:show('video')">
+                    <span>在线影视</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:show('music')">
+                    <span>在线音乐</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:show('utility')">
+                    <span>实用工具</span>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:show('hide')">
+                    <span>隐藏功能</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="content" id="content">
+        <!-- <img src="./images/TX_1.png" alt=""> -->
+    </div>
+    <script src="./js/script.js"></script>
+    <script>
+        function expand() {
+            let checkbox = document.getElementById("menuSwitch");
+            checkbox.checked = !checkbox.checked;
+            if (checkbox.checked) {
+                document.getElementById("content").style.left = "200px";
+            } else {
+                document.getElementById("content").style.left = "70px";
+            }
+        }
+
+        function show(group) {
+            console.log(group)
+        }
+    </script>
+
+</body>
+
+</html>

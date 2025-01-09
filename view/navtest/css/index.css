@@ -1,0 +1,154 @@
+* {
+	/* 页面初始化  清除元素原有的内外边距 */
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	/* 溢出隐藏 */
+	overflow: hidden;
+}
+
+.navbar {
+	/* 相对定位 */
+	position: fixed;
+	width: 70px;
+	/* 设置初始宽度 */
+	transition: width 0.5s;
+	/* 添加过渡效果 */
+}
+
+.navbar input {
+	/* 隐藏元素 */
+	display: none;
+}
+/* 顶部栏 */
+.navbar .topcolumn {
+	position: fixed;
+	left: 70px;
+	height: 43px;
+	width: calc(100% - 75px);
+	border: 1px solid #000;
+	transition: all 0.5s;
+}
+
+/* 展开样式 */
+.navbar input:checked+.topcolumn {
+	left: 200px;
+	width: calc(100% - 205px);
+}
+
+.navbar .topcolumn .menuicon {
+	display: inline-block;
+	width: 43px;
+	height: 43px;
+	background-image: url(../images/icon/菜单.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 70% 70%;
+}
+.navbar input:checked + .topcolumn .menuicon {
+	background-image: url(../images/icon/菜单1.png);
+}
+
+
+/* 左侧菜单样式 */
+.navbar ul {
+	overflow: hidden;
+	list-style: none;
+	width: 70px;
+	height: 100vh;
+	background-color: #2a3f54;
+	transition: all 0.5s;
+}
+
+/* 菜单按钮选中时左侧菜单样式 */
+.navbar input:checked~ul {
+	width: 200px;
+}
+
+/* 左侧选项样式 */
+.navbar ul li {
+	height: 70px;
+	margin-bottom: 10px;
+}
+
+/* 头像栏样式 */
+.navbar ul li:first-child {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 10px;
+}
+
+/* 左侧菜单展开时头像栏样式 */
+.navbar input:checked~ul li:first-child {
+	justify-content: flex-start;
+}
+
+/* 头像样式 */
+.navbar ul li:first-child img {
+	width: 50px;
+	border-radius: 50%;
+}
+
+/* 头像栏文字样式 */
+.navbar ul li:first-child span {
+	display: none;
+	color: #fff;
+	white-space: nowrap;
+	padding-left: 10px;
+}
+
+/* 展开时显示头像栏文字 */
+.navbar input:checked~ul li:first-child span {
+	display: block;
+}
+
+.navbar ul li a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	color: #d1d1d1;
+	text-decoration: none;
+}
+
+.navbar input:checked~ul li a {
+	/* 改变了主轴的方向为默认值 水平排列 */
+	flex-direction: row;
+	/* 改变了弹性项目在弹性盒子内的水平排列方式为从开头排序 */
+	justify-content: flex-start;
+}
+
+.navbar ul li a i {
+	font-size: 25px;
+	margin-bottom: 10px;
+}
+
+.navbar ul li a span {
+	font-size: 12px;
+	/* 给这个文字也加禁止换行 不然切换的一瞬间会垂直排列 */
+	white-space: nowrap;
+}
+
+.navbar input:checked~ul li a span {
+	font-size: 14px;
+}
+
+.navbar ul li a:hover {
+	color: #fff;
+	background-color: #35495d;
+}
+
+
+.content {
+	position: absolute;
+	width: 90%;
+	top: 43px;
+	left: 70px;
+	padding: 10px;
+	transition: left 0.5s;
+}
