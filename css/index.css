@@ -190,7 +190,7 @@ body {
 }
 
 .content table {
-	/* width: 100%; */
+	width: 100%;
 	border-collapse: collapse;
 	text-align: left;
 	margin: 0 auto;
