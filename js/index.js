@@ -106,6 +106,5 @@ function jointItem(obj) {
             </tr>
             `;
     }
-
     return str;
 }
