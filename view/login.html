@@ -4,15 +4,20 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
     <link rel="icon" href="../images/favicon.ico">
+    <!-- CSS -->
     <link rel="stylesheet" href="../css/login.css">
+    <!-- JS -->
     <script src="../js/ForbidView.js"></script>
+    <script src="../js/Utils.js"></script>
     <script src="../js/data.js"></script>
+    <!-- 标题 -->
     <title>登录</title>
 </head>
 
 <body>
-    <a href="https://bxiaoqi.netlify.app/" class="return">返回</a>
+    <a href="../index.html" class="return">返回</a>
     <div class="container container-show">
         <div class="login-box">
             <div class="apple-btn login-apple">
@@ -27,7 +32,7 @@
             <div class="input">
                 <input type="password" id="login-password" placeholder="密码">
             </div>
-            <div class="btn login-btn" onclick="login()">
+            <div class="btn login-btn" id="login-btn" onclick="login()">
                 <span>登录</span>
             </div>
             <div class="change-box login-change">
@@ -55,53 +60,15 @@
                 </div>
             </div>
         </div>
+        <!-- 新增自定义弹窗 -->
+        <div id="custom-alert" class="custom-alert">
+            <div class="alert-content">
+                <div id="alert-message"></div>
+                <div id="alert-buttons"></div>
+            </div>
+        </div>
     </div>
-    <script>
-
-        // 登录
-        function login() {
-            let username = document.getElementById("login-user").value;
-            let password = document.getElementById("login-password").value;
-            for (let i = 0; i < userdata.length; i++) {
-                if (userdata[i].username == username && userdata[i].password == password) {
-                    let userObj = userdata[i]
-                    localStorage.setItem("user", JSON.stringify(userObj));
-                    alert("登陆成功");
-                    window.location.href = "https://bxiaoqi.netlify.app/";
-                    return;
-                }
-            }
-        }
-
-
-        // 封装选择器, 采用ES6箭头函数写法
-        const getSelector = ele => {
-            return typeof ele === "string" ? document.querySelector(ele) : "";
-        }
-        const containerShow = () => {
-            var show = getSelector(".container")
-            show.className += " container-show"
-        }
-        window.onload = containerShow;
-        ((window, document) => {
-            let toSignBtn = getSelector(".toSign"),
-                toLoginBtn = getSelector(".toLogin")
-            loginBox = getSelector(".login-box"),
-                signBox = getSelector(".sign-box");
-
-            toSignBtn.onclick = () => {
-                loginBox.className += ' animate_login';
-                signBox.className += ' animate_sign';
-            }
-
-            toLoginBtn.onclick = () => {
-                loginBox.classList.remove("animate_login");
-                signBox.classList.remove("animate_sign");
-            }
-
-
-        })(window, document);
-    </script>
+    <script src="../js/login.js"></script>
 
 </body>
 

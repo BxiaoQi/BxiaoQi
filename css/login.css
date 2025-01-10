@@ -338,3 +338,37 @@ li:nth-child(2) {
     margin: 0 auto;
     ;
 }
+
+/* 新增自定义弹窗样式 */
+.custom-alert {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.alert-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.alert-content button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #1e90ff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.alert-content button:hover {
+    background-color: #1a7bb9;
+}
