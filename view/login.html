@@ -4,15 +4,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../css/login.css">
-    </link>
     <script src="../js/ForbidView.js"></script>
     <script src="../js/data.js"></script>
     <title>登录</title>
 </head>
 
 <body>
-    <a href="../index.html" class="return">返回</a>
+    <a href="https://bxiaoqi.netlify.app/" class="return">返回</a>
     <div class="container container-show">
         <div class="login-box">
             <div class="apple-btn login-apple">
@@ -43,30 +43,12 @@
                 <li class="yellow-btn"></li>
                 <li class="green-btn"></li>
             </div>
-            <!-- <div class="title">注册页面</div> -->
             <div class="img" style="text-align: center;">
-                <p>扫描关注公众号</p>
+                <p>扫描关注公众号,发送“<span style="color: #1e90ff;">注册</span>”看详细教程</p>
                 <p>发送“<span style="color: #1e90ff;">注册:用户名+密码+邮箱</span>”</p>
                 <p>例如：<span style="color: #1e90ff;">注册:admin+123+666666@qq.com</span></p>
                 <img src="../images/QR_code.png" alt="">
             </div>
-            <!-- <div class="input">
-                <input type="text" id="sign-user" placeholder="用户名">
-            </div>
-            <div class="input">
-                <input type="password" id="sign-password" placeholder="密码">
-            </div>
-            <div class="input">
-                <input type="password" id="sign-code" placeholder="推荐吗">
-            </div>
-            <div class="my-btn">
-                <div class="btn sign-btn" onclick="sign()">
-                    <span>注册</span>
-                </div>
-                <div class="btn sign-btn" onclick="getCode()">
-                    <span>获取推荐码</span>
-                </div>
-            </div> -->
             <div class="change-box sign-change">
                 <div class="change-btn toLogin">
                     <span>去登陆</span>
@@ -85,7 +67,7 @@
                     let userObj = userdata[i]
                     localStorage.setItem("user", JSON.stringify(userObj));
                     alert("登陆成功");
-                    window.location.href = "../index.html";
+                    window.location.href = "https://bxiaoqi.netlify.app/";
                     return;
                 }
             }

@@ -11,8 +11,8 @@
 
 // 用户数据
 var userdata = [
-    { username: "北小齐", password: "127769", email: "1465583644@qq.com", permiss: 3, avatar: "./images/userAvatar/TX_1.png" },
-    { username: "BxiaoQi", password: "127769", email: "1465583644@qq.com", permiss: 1, avatar: "./images/userAvatar/TX_1.png" },
+    { userid: 1001, username: "北小齐", password: "127769", email: "1465583644@qq.com", permiss: 3, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月10日" },
+    { userid: 1002, username: "BxiaoQi", password: "127769", email: "1465583644@qq.com", permiss: 1, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月10日" },
 ]
 
 /**
@@ -28,35 +28,36 @@ var data = {
         name: "在线工具",
         data: [
             { ico: "./images/appicon/icon.png", name: "BMI计算器", src: "./tool/BMI/index.html", desc: "计算体质指数检测你是否是真的胖（结果数据由世界卫生组织定制）", permiss: 0 },
-            { ico: "./images/appicon/icon.png", name: "项目2", src: "#", desc: "描述2", permiss: 1 },
+            { ico: "./images/appicon/在线PSico.ico", name: "在线PS", src: "https://ps.gaoding.com/#/", desc: "免下载的PS，即不占电脑内存又可以快速打开，PS常用的功能这里都有", permiss: 0 },
+            { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
         ]
     },
     video: {
         name: "在线影视",
         data: [
-            { ico: "./images/appicon/icon.png", name: "项目3", src: "#", desc: "描述3", permiss: 0 },
-            { ico: "./images/appicon/icon.png", name: "项目4", src: "#", desc: "描述4", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
+
         ]
     },
     music: {
         name: "在线音乐",
         data: [
-            { ico: "./images/appicon/icon.png", name: "项目5", src: "#", desc: "描述5", permiss: 0 },
-            { ico: "./images/appicon/icon.png", name: "项目6", src: "#", desc: "描述6", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
+
         ]
     },
     progm: {
         name: "实用程序",
         data: [
-            { ico: "./images/appicon/icon.png", name: "项目7", src: "#", desc: "描述7", permiss: 1 },
-            { ico: "./images/appicon/icon.png", name: "项目8", src: "#", desc: "描述8", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
+
         ]
     },
     hides: {
         name: "隐藏功能",
         data: [
-            { ico: "./images/appicon/icon.png", name: "项目9", src: "#", desc: "描述9", permiss: 2 },
-            { ico: "./images/appicon/icon.png", name: "项目10", src: "#", desc: "描述10", permiss: 1 },
+            { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
+
         ]
     }
 }

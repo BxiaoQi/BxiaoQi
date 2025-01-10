@@ -58,7 +58,7 @@ function login() {
         var result = confirm("确定退出登录吗？");
         if (result) {
             localStorage.removeItem("user");
-            window.location.href = "./index.html";
+            window.location.href = "https://bxiaoqi.netlify.app/";
         }
     }
 }
