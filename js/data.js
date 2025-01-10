@@ -23,17 +23,19 @@ var userdata = [
  * 参数  src： 链接
  * 参数  permiss： 权限
  */
-var data = {
+var dataList = {
     tools: {
         name: "在线工具",
+        icon: "./images/icon/在线工具.png",
         data: [
-            { ico: "./images/appicon/icon.png", name: "BMI计算器", src: "./tool/BMI/index.html", desc: "计算体质指数检测你是否是真的胖（结果数据由世界卫生组织定制）", permiss: 0 },
-            { ico: "./images/appicon/在线PSico.ico", name: "在线PS", src: "https://ps.gaoding.com/#/", desc: "免下载的PS，即不占电脑内存又可以快速打开，PS常用的功能这里都有", permiss: 0 },
+            { ico: "./images/appicon/icon.png", name: "BMI计算器", src: "./tool/BMI/index.html", permiss: 0, desc: "计算体质指数检测你是否是真的胖（结果数据由世界卫生组织定制）" },
+            { ico: "./images/appicon/在线PSico.ico", name: "在线PS", src: "https://ps.gaoding.com/#/", permiss: 0, desc: "免下载的PS，即不占电脑内存又可以快速打开，PS常用的功能这里都有" },
             { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
         ]
     },
     video: {
         name: "在线影视",
+        icon: "./images/icon/视频.png",
         data: [
             { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
 
@@ -41,6 +43,7 @@ var data = {
     },
     music: {
         name: "在线音乐",
+        icon: "./images/icon/音乐.png",
         data: [
             { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
 
@@ -48,6 +51,7 @@ var data = {
     },
     progm: {
         name: "实用程序",
+        icon: "./images/icon/主程序.png",
         data: [
             { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
 
@@ -55,6 +59,7 @@ var data = {
     },
     hides: {
         name: "隐藏功能",
+        icon: "./images/icon/锁.png",
         data: [
             { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
 
