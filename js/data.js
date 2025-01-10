@@ -11,8 +11,8 @@
 
 // 用户数据
 var userdata = [
-    { userid: 1001, username: "北小齐", password: "127769", email: "1465583644@qq.com", permiss: 3, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月10日" },
-    { userid: 1002, username: "BxiaoQi", password: "127769", email: "1465583644@qq.com", permiss: 1, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月10日" },
+    { userid: 1001, username: "北小齐", password: "127769", email: "1465583644@qq.com", permiss: 2, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月11日" },
+    { userid: 1002, username: "BxiaoQi", password: "127769", email: "1465583644@qq.com", permiss: 1, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月11日" },
 ]
 
 /**
