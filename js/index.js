@@ -33,7 +33,7 @@ function showData(key) {
         // 显示指定数据
     } else {
         title.innerText = dataList[key].name; // 设置标题
-        htmlstr += jointItemGroup(dataList[g].data); // 拼接数据
+        htmlstr += jointItemGroup(dataList[key].data); // 拼接数据
     }
     tbody.innerHTML = htmlstr; // 显示数据
 
@@ -83,7 +83,7 @@ function initMenu() {
         menu.innerHTML += `
             <li title="${dataList[key].name}" onclick="showData('${key}')">
                 <img src="${dataList[key].icon}" alt=""></img>
-                <a href="javascript:showData('${key}')"> ${dataList[key].name} </a>
+                <a href="javascript:showData(${key})"> ${dataList[key].name} </a>
             </li>
         `;
     });
