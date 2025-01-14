@@ -5,14 +5,14 @@
  * 参数  username： 用户名
  * 参数  password： 密码
  * 参数  email： 邮箱
- * 参数  permiss： 权限 0：游客 1：普通用户 2：管理员 3：超级管理员
+ * 参数  permiss： 权限 0：游客 1：普通用户 2：管理员 3：超级管理员 4：开发者
  * 参数  avatar： 头像
  */
 
 // 用户数据
 var userdata = [
-    { userid: 1001, username: "北小齐", password: "127769", email: "1465583644@qq.com", permiss: 3, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月10日" },
-    { userid: 1002, username: "BxiaoQi", password: "127769", email: "1465583644@qq.com", permiss: 1, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月10日" },
+    { userid: 1001, username: "BxiaoQi", password: "177077", email: "1465583644@qq.com", permiss: 4, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月10日" },
+    { userid: 1002, username: "北小齐", password: "127769", email: "1465583644@qq.com", permiss: 1, avatar: "./images/userAvatar/TX_1.png", regTime: "2025年1月10日" },
 ]
 
 /**
@@ -61,7 +61,13 @@ var dataList = {
         name: "隐藏功能",
         icon: "./images/icon/锁.png",
         data: [
+            { ico: "./images/appicon/icon.png", name: "界面简单1", src: "https://spankbang.com/", desc: "力推", permiss: 4 },
+            { ico: "./images/appicon/icon.png", name: "界面简单2", src: "https://www.xvideos.com/", desc: "推荐", permiss: 4 },
+            { ico: "./images/appicon/icon.png", name: "界面简单3", src: "https://beeg.com/", desc: "可以", permiss: 4 },
+            { ico: "./images/appicon/icon.png", name: "动漫风格", src: "https://18comic.vip/", desc: "动漫风格", permiss: 4 },
+            { ico: "./images/appicon/icon.png", name: "直播", src: "https://zh.stripchat.com/", desc: "有直播", permiss: 4 },
             { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
+            // { ico: "./images/appicon/icon.png", name: "模板", src: "#", desc: "描述3", permiss: 4 },
 
         ]
     }
