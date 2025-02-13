@@ -1,0 +1,336 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+/* 通用原子类 */
+
+.ipt {
+    width: 200px;
+    border: 1px solid #dadada;
+    padding: 5px;
+    outline: none;
+    margin-right: 20px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+.ipt:focus {
+    border: 1px solid #48a7ff;
+    box-shadow: 0 0 5px #48a7ff;
+    background-color: #fffed1;
+}
+
+.btn {
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background-color: #73bbff;
+    border-color: #1890ff;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2e9aff;
+    transform: translateY(-2px);
+}
+
+
+.rbtn {
+    background-color: #ff4d4f;
+}
+
+.gbtn {
+    background-color: #52c41a;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+/* ==============================左侧导航菜单 */
+/* 菜单 */
+.menu {
+    position: relative;
+    width: 13%;
+    height: 100%;
+    background-color: #32323A;
+}
+
+.menu a {
+    color: #fff;
+}
+
+.menu>a {
+    display: block;
+    width: 100%;
+    height: 70px;
+    text-align: center;
+    padding: 10px;
+    background-color: #7a7a7a;
+}
+
+.menu>a>img {
+    height: 100%;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.menu>ul {
+    margin-top: 20px;
+}
+
+
+.menu>ul>li {
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.menu>ul>li>a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.menu>ul>li:hover {
+    background-color: #29282E;
+}
+
+.menu>ul>li::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 10px;
+    height: 10px;
+    background-image: url("../imgs/icon/icon_arrow_left.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: rotate(180deg) translateY(50%);
+}
+
+.menu>ul>.active {
+    background-color: #1890FF;
+}
+
+.menu>ul>.active:hover {
+    background-color: #1890FF;
+}
+
+/* ==============================右侧顶部栏与标题栏 */
+
+#username {
+    margin-right: 40px;
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+    padding: 20px;
+    background-color: #f5ffbd;
+}
+
+.header img {
+    height: 30px;
+}
+
+.header button {
+    background-color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.header button:hover {
+    background-color: #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.header_left>p {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.header_right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.gap {
+    display: inline-block;
+    width: 10px;
+}
+
+.content {
+    width: 87%;
+}
+
+.content>.top {
+    display: flex;
+    width: 100%;
+    height: 70px;
+    line-height: 50px;
+    justify-content: space-between;
+}
+
+.content>.top>.account>#avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.content>.top>.account>#logout {
+    cursor: pointer;
+    color: #1900ff;
+}
+
+.content>.title {
+    padding: 10px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.content>.title>span {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.content>.title>.suptitle {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.content>.title>.suptitle>a {
+    color: #000000;
+}
+
+.content>.title>.suptitle>a:last-child {
+    font-weight: bold;
+    color: #1900ff;
+}
+
+/* =============================================表格相关样式 */
+.tab_icon img {
+    height: 100%;
+}
+
+.content>.tablebox {
+    padding: 0 10px;
+}
+
+.content>.tablebox>.table {
+    width: 100%;
+    height: 75vh;
+    overflow: auto;
+}
+
+/* 表格 */
+.content>.tablebox>.table>table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.content>.tablebox>.table>table>thead {
+    /* 确保表头在滚动时固定在顶部 */
+    position: sticky;
+    top: -1px;
+    z-index: 1;
+}
+
+.content>.tablebox>.table>table>thead>tr {
+    height: 60px;
+    background-color: rgb(197, 197, 197);
+}
+
+/* 整行样式 */
+.content>.tablebox>.table>table>thead>tr>th {
+    width: 100%;
+    border-bottom: 1px solid #000000;
+}
+
+/* 聚焦样式 */
+.content>.tablebox>.table>table>tbody>tr:hover {
+    background-color: rgb(255, 253, 114);
+}
+
+.content>.tablebox>.table>table>thead>tr>th,
+.content>.tablebox>.table>table>tbody>tr>td {
+    height: 50px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+/* 操作 */
+.tab_operation {
+    width: 5%;
+    max-width: 5%;
+}
+
+.tab_icon>img {
+    height: 100%;
+}
+
+/* 操作按钮样式 */
+.tab_operation>button {
+    border-radius: 5px;
+    font-size: 12px;
+    transition: all 0.3s;
+}
+
+/* 按钮动画 */
+.tab_operation>button:hover {
+    transform: scale(1.2);
+}
+
+/* 分组下拉按钮 */
+#select_group {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 18px;
+    height: 18px;
+    border: none;
+    outline: none;
+}
+
+/* =============================搜索栏样式 */
+
+
+/* 搜索栏 */
+.search {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 16px 40px;
+}

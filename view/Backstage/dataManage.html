@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../../js/Utils/vue.global.js"></script>
+    <script src="../../js/Utils/axios1.6.7.min.js"></script>
+    <script type="module" src="../../js/Utils/Tools.js"></script>
+    <link rel="stylesheet" href="../../css/Backstage.css">
+    <title>北小齐珍藏 | 数据管理</title>
+    <style>
+        /* 编号 */
+        .tab_id {
+            width: 2%;
+            max-width: 2%;
+        }
+
+
+        /* 名称 */
+        .tab_name {
+            width: 4%;
+            max-width: 4%;
+        }
+
+        /* 描述 */
+        .tab_desc {
+            width: 15%;
+            max-width: 15%;
+        }
+
+        /* 网站 */
+        .tab_src {
+            width: 10%;
+            max-width: 10%;
+        }
+
+        /* 权限 */
+        .tab_permission {
+            width: 3%;
+            max-width: 3%;
+        }
+
+        /* 图标 */
+        .tab_icon {
+            width: 2%;
+            max-width: 2%;
+        }
+
+        /* 分组 */
+        .tab_group {
+            position: relative;
+            width: 3%;
+            max-width: 3%;
+        }
+
+        .add_form {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.555);
+            position: absolute;
+            z-index: 5;
+        }
+
+        .add_form_box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 30px 50px;
+            background-color: antiquewhite;
+            border-radius: 10px;
+        }
+
+        .add_form_box label {
+            display: inline-block;
+            width: 60px;
+        }
+
+        .add_form_box .ipt {
+            margin: 10px 0;
+        }
+
+        .add_from_box {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+
+        .add_from_box button {
+            border-radius: 5px;
+        }
+
+        .img_from_box {
+            width: 70px;
+            margin: auto;
+        }
+
+        .img_from_box img {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 添加数据表单 -->
+        <div class="add_form" id="add_form">
+            <div class="add_form_box">
+                <label for="dataname">名称：<span>*</span></label>
+                <input type="text" id="dataname" class="ipt" placeholder="请输入名称" v-model="formData.name"></input>
+                <br>
+                <label for="datasrc">网站：<span>*</span></label>
+                <input type="text" id="datasrc" class="ipt" placeholder="请输入网站" v-model="formData.src"></input>
+                <a :href="formData.src" target="_blank">→</a>
+                <br>
+                <label for="datadesc">描述：<span>*</span></label>
+                <textarea name="datadesc" id="datadesc" cols="27" rows="3" v-model="formData.desc"></textarea>
+                <br>
+                <label for="datapermission">权限：</label>
+                <select name="datapermission" id="datapermission" class="ipt"
+                    @change="(e)=>{formData.permission=e.target.value}">
+                    <option value="0">游客</option>
+                    <option value="1">用户</option>
+                    <option value="2">会员</option>
+                    <option value="3">管理员</option>
+                    <option value="4">超级管理员</option>
+                    <option value="5">开发者</option>
+                </select>
+                <br>
+                <label for="datagroup">分组：</label>
+                <select name="datagroup" id="datagroup" class="ipt" @change="(e)=>{formData.group=e.target.value}">
+                    <option v-for="e in groupList" :value="e.name"> {{e.name}} </option>
+                </select>
+                <br>
+                <label for="dataico">图标：</label>
+                <input type="text" id="dataico" class="ipt" placeholder="请输入图标" v-model="formData.ico"></input>
+                <div class="img_from_box">
+                    <img :src="formData.ico" alt="">
+                </div>
+                <div class="add_from_box">
+                    <button @click="()=>{formData=emptyFormData;this.hideForm()}" class="btn rbtn">取消</button>
+                    <button @click="addData" class="btn">{{btnname}}</button>
+                </div>
+            </div>
+        </div>
+        <!-- 左侧菜单栏 -->
+        <div class="menu">
+            <a href="../../index.html"><img src="../../logo.png" alt=""></img></a>
+
+            <ul>
+                <li class="active"><a href="">数据管理</a></li>
+                <li><a href="./groupManage.html">分组管理</a></li>
+                <li><a href="./userManage.html">用户管理</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <!-- 顶部信息栏 -->
+            <div class="header">
+                <div class="header_left">
+                    <p>北小齐珍藏 后台管理</p>
+                </div>
+                <div class="header_right">
+                    <p>当前用户：<span id="username">{{userinfo.username}}</span></p>
+                    <button onclick="window.location.href = '../../index.html'" v-if="userinfo.permission>=3"> 前 台
+                    </button>
+                    <button @click="logout()" v-if="userinfo.permission!==0"> 退 出 </button>
+                </div>
+            </div>
+
+            <!-- 标题栏 -->
+            <div class="title">
+                <div class="suptitle">
+                    <a href="../index.html">北小齐珍藏</a>
+                    <span>/</span>
+                    <a href="">数据管理</a>
+                </div>
+                &emsp;
+                <span>数据管理</span>
+            </div>
+
+            <!-- 表格 -->
+            <div class="tablebox">
+                <!-- 搜索栏 -->
+                <div class="search">
+                    <div class="search_box">
+                        <label for="keyword">关键词搜索：</label>
+                        <input type="text" id="keyword" class="ipt" placeholder="请输入关键词" v-model="keyword"
+                            title="留空：查询全部；纯数字：根据编号查询；非纯数字：优先根据名称查询，无结果自动根据描述查询"></input>
+                        <button @click="search" class="btn">查询</button>
+                    </div>
+                    <div class="add_box">
+                        <button @click="showForm" class="btn">添加数据</button>
+                    </div>
+                </div>
+
+                <!-- 表格区 -->
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="tab_id">编号</th>
+                                <th class="tab_name">名称</th>
+                                <th class="tab_desc">描述</th>
+                                <th class="tab_src">网站</th>
+                                <th class="tab_permission">权限</th>
+                                <th class="tab_icon">图标</th>
+                                <th class="tab_group">
+                                    <p>{{groupname}}</p>
+                                    <select name="select_group" id="select_group" @change="changeGroup">
+                                        <option value="all" selected>
+                                            <p class="select_group_son">全部</p>
+                                        </option>
+                                        <option v-for="e in groupList" :value="e.name">
+                                            <p class="select_group_son">{{e.name}}</p>
+                                        </option>
+                                    </select>
+                                </th>
+                                <th class="tab_operation">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="e in dataList">
+                                <td :title="e.id" class="tab_id">{{e.id}}</td>
+                                <td :title="e.name" class="tab_name">{{e.name}}</td>
+                                <td :title="e.desc" class="tab_desc">{{e.desc}}</td>
+                                <td :title="e.src" class="tab_src"><a :href="e.src" target="_blank">{{e.src}}</a></td>
+                                <td :title="e.permission" v-if="e.permission==0" class="tab_permission">游客</td>
+                                <td :title="e.permission" v-else-if="e.permission==1" class="tab_permission">用户</td>
+                                <td :title="e.permission" v-else-if="e.permission==2" class="tab_permission">会员</td>
+                                <td :title="e.permission" v-else-if="e.permission==3" class="tab_permission">管理员</td>
+                                <td :title="e.permission" v-else-if="e.permission==4" class="tab_permission">超级管理员</td>
+                                <td :title="e.permission" v-else="e.permission>=5" class="tab_permission">开发者</td>
+                                <td :title="e.ico" class="tab_icon"><a :href="e.ico" target="_blank">
+                                        <img :src="e.ico"></a></td>
+                                <td :title="e.group" class="tab_group">{{e.group}}</td>
+                                <td class="tab_operation">
+                                    <button class="btn" @click="edit(e.id)">编辑</button>
+                                    <i class="gap"></i>
+                                    <button class="btn rbtn" @click="del(e.id)">删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { baseUrl } from "../../js/constant/url.js";
+        import { popup } from "../../js/Utils/Utils.js";
+
+        const token = localStorage.getItem("token");
+        const { createApp } = Vue;
+        let timeoutId; // 消息提示
+        createApp({
+            data() {
+                return {
+                    // 请求头
+                    headers: { "Authorization": token },
+                    // 显示数据列表
+                    dataList: [],
+                    // 分组列表
+                    groupList: [],
+                    // 分组
+                    groupname: "分组",
+                    // 用户信息
+                    userinfo: {},
+                    // 关键词
+                    keyword: "",
+
+                    // 按钮内容
+                    btnname: "添加",
+
+                    // 表单数据
+                    formData: {
+                        id: -1,
+                        name: "",
+                        desc: "",
+                        src: "",
+                        permission: 0,
+                        ico: "https://s3.uuu.ovh/imgs/2025/02/09/1f68c4bc14e04142.png",
+                        group: "在线工具"
+                    },
+
+                }
+            },
+            methods: {
+                // 获取用户信息
+                async getUserInfo() {
+                    let res = await axios.post(baseUrl + '/user/getUserByToken', {}, {
+                        headers: { 'Authorization': token }
+                    })
+                    this.userinfo = res.data.data
+                },
+                // 显示所有
+                async getDataList(group) {
+                    let res = [];
+                    if (group) {
+                        // 根据分组获取数据列表
+                        res = await axios.get(baseUrl + "/data/getDataByGroup", {
+                            headers: this.headers,
+                            params: {
+                                group: group
+                            }
+                        });
+                    } else {
+                        // 显示全部
+                        res = await axios.get(baseUrl + "/data/getDataByDimName", {
+                            headers: this.headers,
+                        });
+                    }
+                    if (res.data.data !== null) {
+                        this.dataList = res.data.data;
+                        return;
+                    }
+                },
+
+
+                // 获取分组列表
+                async getGroupList() {
+                    let res = await axios.get(baseUrl + "/group/getGroupList");
+                    console.log("data:" + res.data.data);
+
+                    this.groupList = res.data.data;
+                },
+
+
+                // 切换分组
+                changeGroup() {
+                    let group = document.getElementById("select_group").value;
+                    if (group == "all") {
+                        this.groupname = "分组"; // 更新分组名称
+                        this.getDataList(); // 获取全部数据
+                        return;
+                    }
+                    this.groupname = group; // 更新分组名称
+                    this.getDataList(group); // 获取分组数据
+                },
+
+
+                // 搜索
+                async search() {
+
+                    // 优先根据id查询
+                    let res = await axios.get(baseUrl + "/data/getDataById", {
+                        headers: this.headers,
+                        params: {
+                            id: parseInt(this.keyword)
+                        }
+                    });
+                    if (res.data.data != null && res.data.data != []) {
+                        this.dataList = [res.data.data];
+                        return;
+                    }
+
+                    // 根据name查询
+                    res = await axios.get(baseUrl + "/data/getDataByDimName", {
+                        headers: this.headers,
+                        params: {
+                            name: this.keyword
+                        }
+                    });
+                    if (res.data.data != null && res.data.data != []) {
+                        this.dataList = res.data.data;
+                        return;
+                    }
+
+                    // 再根据desc查询
+                    res = await axios.get(baseUrl + "/data/getDataByDesc", {
+                        headers: this.headers,
+                        params: {
+                            desc: this.keyword
+                        }
+                    });
+                    if (res.data.data != null && res.data.data != []) {
+                        this.dataList = res.data.data;
+                        return;
+
+                    }
+                },
+
+
+                // 添加数据
+                async addData() {
+                    let res = "";
+                    if (this.formData.name === "" || this.formData.desc === "" || this.formData.src === "") {
+                        alert("请填写完整信息");
+                        return;
+                    }
+                    if (this.formData.ico === "") {
+                        this.formData.ico = "http://124.222.56.109/images/appicon/icon.png";
+                    }
+                    // 添加
+                    if (this.formData.id === -1) {
+                        res = await axios.post(baseUrl + "/data/addData", this.formData, {
+                            headers: this.headers,
+                        });
+                        // 修改
+                    } else {
+                        res = await axios.put(baseUrl + "/data/updateData", this.formData, {
+                            headers: this.headers,
+                        });
+                    }
+                    if (res.data.code === 200) {
+                        if (this.formData.id === -1) {
+                            timeoutId = popup("添加成功", 1, timeoutId);
+                        } else {
+                            timeoutId = popup("修改成功", 1, timeoutId);
+                        }
+                        this.upDataList();
+                        this.hideForm();
+                    } else {
+                        alert(res.data.message);
+                        console.log(res.data);
+                    }
+                },
+
+                // 显示表单
+                showForm() {
+                    document.getElementById("add_form").style.display = "block";
+                },
+
+                // 隐藏表单
+                hideForm() {
+                    document.getElementById("add_form").style.display = "none";
+                    this.btnname = "添加";
+                },
+
+
+                // 编辑数据
+                async edit(id) {
+                    this.btnname = "修改";
+                    let res = await axios.get(baseUrl + "/data/getDataById", {
+                        headers: this.headers,
+                        params: {
+                            id: id
+                        }
+                    });
+                    let data = res.data.data;
+                    this.formData = {
+                        id: data.id,
+                        name: data.name,
+                        desc: data.desc,
+                        src: data.src,
+                        ico: data.ico
+                    };
+                    let options = document.getElementById("datapermission").options;
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].value == data.permission) {
+                            options[i].selected = true;
+                        }
+                    }
+                    let options2 = document.getElementById("datagroup").options;
+                    for (let i = 0; i < options2.length; i++) {
+                        if (options2[i].value == data.group) {
+                            options2[i].selected = true;
+                        }
+                    }
+                    this.showForm();
+
+                },
+
+
+                // 删除数据
+                async del(id) {
+                    //确认框
+                    if (confirm("确定删除吗？")) {
+                        // 删除
+                        let res = await axios.delete(baseUrl + "/data/deleteData", {
+                            headers: this.headers,
+                            params: {
+                                id: id
+                            }
+                        });
+                        if (res.data.code == 200) {
+                            timeoutId = popup("删除成功", 1, timeoutId);
+                            this.upDataList();
+                        } else {
+                            alert(res.data.message);
+                        }
+                    }
+                },
+
+                // 退出登录
+                async logout() {
+                    localStorage.setItem("token", "");
+                    window.location.href = '../../index.html';
+                },
+
+                // 刷新数据列表
+                upDataList() {
+                    this.dataList = [];
+                    this.formData = {
+                        id: -1,
+                        name: "",
+                        desc: "",
+                        src: "",
+                        permission: 0,
+                        ico: "https://s3.uuu.ovh/imgs/2025/02/09/1f68c4bc14e04142.png",
+                        group: "在线工具"
+                    };
+                    document.getElementById("datapermission").options[0].selected = true;
+                    document.getElementById("datagroup").options[0].selected = true;
+                    if (this.groupname !== "分组") {
+                        this.getDataList(this.groupname);
+                        return;
+                    }
+                    this.getDataList();
+                },
+
+                // 判断权限
+                async checkPermission() {
+                    let res = await axios.post(baseUrl + "/user/getUserByToken", {}, {
+                        headers: this.headers
+                    });
+                    if (res.data.code === 200) {
+                        if (res.data.data.permission < 3) {
+                            window.location.href = '../../index.html';
+                        }
+                    } else {
+                        alert(res.data.message);
+                        window.location.href = '../../index.html';
+                    }
+                },
+
+
+
+            },
+            // 挂载完毕执行(初始化)
+            async mounted() {
+                await this.checkPermission(); // 判断权限
+                await this.getDataList(); // 获取所有数据
+                await this.getGroupList(); // 获取分组列表
+                await this.getUserInfo(); // 获取用户信息
+            }
+        }).mount("#app");
+    </script>
+</body>
+
+</html>

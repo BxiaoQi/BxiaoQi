@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/Utils/vue.global.js"></script>
+    <script src="./js/Utils/axios1.6.7.min.js"></script>
+    <link rel="stylesheet" href="../../css/Backstage.css">
+    <title>北小齐珍藏 | 分组管理</title>
+    <style>
+        /* 编号 */
+        .tab_id {
+            width: 2%;
+            max-width: 2%;
+        }
+        
+
+        /* 名称 */
+        .tab_name {
+            width: 4%;
+            max-width: 4%;
+        }
+
+        /* 描述 */
+        .tab_createdate {
+            width: 15%;
+            max-width: 15%;
+        }
+        /* 图标 */
+        .tab_icon {
+            width: 2%;
+            max-width: 2%;
+        }
+        
+        .add_form {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.555);
+            position: absolute;
+            z-index: 5;
+        }
+
+        .add_form_box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 30px 50px;
+            background-color: antiquewhite;
+            border-radius: 10px;
+        }
+
+        .add_form_box label {
+            display: inline-block;
+            width: 60px;
+        }
+
+        .add_form_box .ipt {
+            margin: 10px 0;
+        }
+
+        .add_from_box {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+
+        .add_from_box button {
+            border-radius: 5px;
+        }
+
+        .img_from_box {
+            width: 70px;
+            margin: auto;
+        }
+
+        .img_from_box img {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 左侧菜单栏 -->
+        <div class="menu">
+            <a href="../../index.html"><img src="../../logo.png" alt=""></img></a>
+
+            <ul>
+                <li><a href="./dataManage.html">数据管理</a></li>
+                <li class="active"><a href="">分组管理</a></li>
+                <li><a href="./userManage.html">用户管理</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <!-- 顶部信息栏 -->
+            <div class="top">
+                <p>北小齐珍藏 后台管理</p>
+                <div class="account">
+                    <img id="avatar" src="../../imgs/TX_1.png"></img>
+                    <i class="gap"></i>
+                    <span>账号:</span>
+                    <span id="username">admin</span>
+                    <i class="gap"></i>
+                    <i class="gap"></i>
+                    <span id="logout">退出登录</span>
+                </div>
+            </div>
+
+            <!-- 标题栏 -->
+            <div class="title">
+                <div class="suptitle">
+                    <a href="../index.html">北小齐珍藏</a>
+                    <span>/</span>
+                    <a href="">分组管理</a>
+                </div>
+                &emsp;
+                <span>分组管理</span>
+            </div>
+
+
+            <!-- 表格 -->
+            <div class="tablebox">
+                <!-- 搜索栏 -->
+                <div class="search">
+                    <div class="search_box">
+                        <label for="keyword">关键词搜索：</label>
+                        <input type="text" id="keyword" class="ipt" placeholder="请输入关键词" v-model="keyword"
+                            title="留空：查询全部；纯数字：根据编号查询；非纯数字：优先根据名称查询，无结果自动根据描述查询"></input>
+                        <button @click="search" class="btn">查询</button>
+                    </div>
+                    <div class="add_box">
+                        <button @click="showForm" class="btn">添加数据</button>
+                    </div>
+                </div>
+
+                <!-- 表格区 -->
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="tab_id">编号</th>
+                                <th class="tab_name">名称</th>
+                                <th class="tab_createdate">创建时间</th>
+                                <th class="tab_icon">图标</th>
+                                <th class="tab_operation">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="e in dataList">
+                                <td :title="e.id" class="tab_id">{{e.id}}</td>
+                                <td :title="e.name" class="tab_name">{{e.name}}</td>
+                                <td :title="e.createdate" class="tab_createdate">{{e.createdate}}</td>
+                                <td :title="e.ico" class="tab_icon"><a :href="e.ico" target="_blank"><img
+                                            :src="e.ico"></a></td>
+                                <td class="tab_operation">
+                                    <button class="btn" @click="edit(e.id)">编辑</button>
+                                    <i class="gap"></i>
+                                    <button class="btn rbtn" @click="del(e.id)">删除</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { baseUrl } from "../../js/constant/url.js";
+        
+        const { createApp } = Vue;
+        const token = localStorage.getItem("token");
+        createApp({
+            data() {
+                return {
+                    // 请求头
+                    headers: { "Authorization": token },
+                    // 显示数据列表
+                    dataList: [],
+                    // 分组列表
+                    groupList: [],
+                    // 分组
+                    groupname: "分组",
+                    // 关键词
+                    keyword: "",
+
+                    // 按钮内容
+                    btnname: "添加",
+
+                    // 空表单
+                    emptyFormData: {
+                        id: -1,
+                        name: "",
+                        desc: "",
+                        src: "",
+                        permission: 0,
+                        ico: "",
+                        group: "在线工具"
+                    },
+
+                    // 表单数据
+                    formData: {
+                        id: -1,
+                        name: "",
+                        desc: "",
+                        src: "",
+                        permission: 0,
+                        ico: "",
+                        group: "在线工具"
+                    },
+
+                }
+            },
+            methods: {
+                // 显示所有
+                async showAll() {
+                    let res = await axios.get(baseUrl + "/data/getDataByDimName");
+                    this.dataList = res.data.data;
+                }
+            },
+            // 挂载完毕执行
+            mounted() {
+                this.showAll(); // 显示所有
+            }
+        }).mount("#app");
+    </script>
+    </script>
+</body>
+
+</html>

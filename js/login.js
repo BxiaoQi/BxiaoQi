@@ -1,142 +1,91 @@
-var retriesnum = 0; // 登录失败次数
+import { baseUrl } from "../js/constant/url.js";
+import { REGEXP_USERNAME, REGEXP_PASSWORD } from "../js/constant/regexp.js";
+import { popup } from "../js/Utils/Utils.js";
 
-// 初始化函数
-!function () {
-    isDisable() // 判断是否被禁用登录
-}();
-
-
-// 登录
-function login() {
-    let username = document.getElementById("login-user").value;
-    let password = document.getElementById("login-password").value;
-    if (username !== "" && password !== "") {
-        for (let i = 0; i < userdata.length; i++) {
-            if (userdata[i].username == username && userdata[i].password == password) {
-                let userObj = userdata[i]; // 获取用户信息
-                localStorage.setItem("user", JSON.stringify(userObj)); // 存储用户信息
-                showCustomAlert("登录成功", `
-                    <button onclick="window.location.href = '../index.html'">确定</button>
-                `);
-                return;
-            }
+let timeoutId; // 放到全局
+// 页面加载完成
+window.onload = () => {
+    document.getElementById("login_btn").addEventListener("click", login);
+    document.getElementById("register_btn").addEventListener("click", register);
+    // 添加键盘监听，监听回车登录
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            login();
         }
+    });
+}
 
-        // 登录失败次数大于等于3次
-        if (retriesnum >= 3) {
-            localStorage.setItem("forbidTime", new Date().getTime()); // 存储禁用登录时间
-            DisableLogin() // 禁用登录
-            // 建议找回密码
-            showCustomAlert("登录失败次数过多<br/>建议您关注公众号发送“找回密码”<br/>查看详细流程", `
-                    <img src="../images/QR_code.png" alt="">
-                    <button onclick='hideCustomAlert()'>确定</button>
-                `);
-            return;
-        } else if (retriesnum < 3) {
-            // 账号或密码错误
-            showCustomAlert("账号或密码错误", `
-                        <button onclick="retpwd()">找回密码</button>
-                        <button onclick='hideCustomAlert()'>重试</button>
-                    `);
-            retriesnum++; // 登录失败次数加1
-            return;
-        }
+async function login() {
+    var load = document.getElementById("load-box");
+    load.style.display = "flex"; // 显示加载框
+    var username = document.getElementById("login_name").value;
+    var password = document.getElementById("login_password").value;
+    if (username == "" || password == "") {
+        load.style.display = "none";
+        timeoutId = popup("信息填写不完整", 2, timeoutId);
+        return;
     }
-    showCustomAlert("信息填写不完整", `
-        <button onclick='hideCustomAlert()'>重新填写</button>
-    `);
-    return;
-}
 
-function retpwd() {// 建议找回密码
-    showCustomAlert("关注公众号发送“找回密码”<br/>查看详细流程", `
-            <img src="../images/QR_code.png" alt="">
-            <button onclick='hideCustomAlert()'>确定</button>
-        `);
-}
-
-// 显示自定义弹窗
-function showCustomAlert(message, buttons) {
-    document.getElementById("alert-message").innerHTML = message;
-    document.getElementById("alert-buttons").innerHTML = buttons;
-    document.getElementById("custom-alert").style.display = "block";
-}
-
-// 隐藏自定义弹窗
-function hideCustomAlert() {
-    document.getElementById("custom-alert").style.display = "none";
-}
-
-// 判断是否被禁用登录
-function isDisable() {
-    if (getforbidTime()) {
-        let time = new Date().getTime() - getforbidTime(); // 获取当前时间与禁用登录时间之差
-        let Liberate = new Date(getforbidTime() + 86400000); // 获取解禁时间
-
-        // 如果被禁用登录
-        if (time < 86400000) {
-            DisableLogin() // 禁用登录
-            // 提示：您已被限制登录
-            showCustomAlert("您已被限制登录<br/>请在" + dateformat(Liberate, "MM月dd日 hh:mm:ss") + "后再试<br/>可以关注公众号获取帮助", `
-                <img src="../images/QR_code.png" alt="">
-                <button onclick='hideCustomAlert()'>关闭</button>`);
-            return;
+    let params = { username: username, password: password };
+    let res = await axios.post(baseUrl + "/user/login", params, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+    })
+    if (res.data.code == 200) {
+        let token = res.data.data;
+        // 存储token
+        localStorage.setItem("token", token);
+        load.style.display = "none"; // 隐藏加载框
+        timeoutId = popup("登录成功", 1, timeoutId);
+        // 跳转
+        let resp = await axios.post(baseUrl + "/user/getUserByToken", {}, {
+            headers: { "Authorization": token }
+        })
+        if (resp.data.data.permission >= 3) {
+            window.location.href = "../../view/Backstage/dataManage.html";
         } else {
-            localStorage.removeItem("forbidTime");
-            return;
+            window.location.href = "../../index.html";
         }
-    }
-    return;
-}
 
-// 禁用登录操作
-function DisableLogin() {
-    let loginbtn = document.getElementById("login-btn")
-    let loginuser = document.getElementById("login-user")
-    let loginpassword = document.getElementById("login-password")
-    loginbtn.style.display = "none"; // 隐藏登录按钮
-    loginuser.disabled = true; // 禁用登录
-    loginpassword.disabled = true; // 禁用登录
-    loginuser.value = ""; // 清空登录信息
-    loginpassword.value = ""; // 清空登录信息
-}
-
-// 获取禁止登录时间
-function getforbidTime() {
-    let forbidTime = parseInt(localStorage.getItem("forbidTime"));
-    if (forbidTime) {
-        return forbidTime;
     } else {
-        return 0;
-    }
-}
-
-// 封装选择器, 采用ES6箭头函数写法
-const getSelector = ele => {
-    return typeof ele === "string" ? document.querySelector(ele) : "";
-}
-
-const containerShow = () => {
-    var show = getSelector(".container")
-    show.className += " container-show"
-}
-
-window.onload = containerShow;
-((window, document) => {
-    let toSignBtn = getSelector(".toSign"),
-        toLoginBtn = getSelector(".toLogin")
-    loginBox = getSelector(".login-box"),
-        signBox = getSelector(".sign-box");
-
-    toSignBtn.onclick = () => {
-        loginBox.className += ' animate_login';
-        signBox.className += ' animate_sign';
+        load.style.display = "none";
+        console.log(res.data);
+        timeoutId = popup(res.data.message, 2, timeoutId);
+        return;
     }
 
-    toLoginBtn.onclick = () => {
-        loginBox.classList.remove("animate_login");
-        signBox.classList.remove("animate_sign");
+}
+
+async function register() {
+    var username = document.getElementById("register_name").value;
+    var password = document.getElementById("register_password").value;
+    var password2 = document.getElementById("register_password_two").value;
+    if (username == "" || password == "" || password2 == "") {
+        timeoutId = popup("信息填写不完整", 2, timeoutId);
+        return;
     }
-
-
-})(window, document);
+    if (password != password2) {
+        timeoutId = popup("两次输入的密码不一致", 2, timeoutId);
+        return;
+    }
+    if (!username.match(REGEXP_USERNAME)) {
+        alert("用户名格式不正确。\n1.只能包含中文、英文、数字、下划线、以及长度为3-16位");
+        return;
+    }
+    if (!password.match(REGEXP_PASSWORD)) {
+        alert("密码格式不正确。\n1.只能包含英文、数字、下划线、以及长度为6-16位");
+        return;
+    }
+    let params = { username: username, password: password };
+    res = await axios.post(baseUrl + "/user/register", params, {
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    });
+    if (res.data.code == 200) {
+        timeoutId = popup("注册成功", 1, timeoutId);
+        window.location.href = "./login.html";
+    } else {
+        alert(res.data.message);
+        return;
+    }
+}

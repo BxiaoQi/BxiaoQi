@@ -1,61 +1,157 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ICON -->
-    <link rel="icon" href="./images/favicon.ico">
-    <!-- JS -->
-    <script src="./js/ForbidView.js"></script>
-    <script src="./js/data.js"></script>
-    <!-- CSS -->
+    <script src="./js/Utils/axios1.6.7.min.js"></script>
+    <script src="./js/Utils/vue.global.js"></script>
     <link rel="stylesheet" href="./css/index.css">
-    <!-- TITLE -->
+    </link>
     <title>北小齐珍藏</title>
-    <style>
-        body {
-            background-image: url("./images/background.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-position: center;
-        }
-    </style>
 </head>
 
 <body>
-    <!-- 导航栏 -->
-    <div class="navbar">
-        <input type="checkbox" id="menuSwitch">
-        <!-- 顶部栏 -->
-        <div class="topcolumn">
-            <a class="menuicon" href="javascript:expand()"></a>
-            <a href="http://bxiaoqi.netlify.app" class="logo"><img src="./images/logo.png"></a>
+    <div id="app">
+        <div class="header">
+            <div class="header_left">
+                <img src="./logo.png" alt="">
+            </div>
+            <div class="header_right">
+                <p>当前用户：<span id="username">{{userinfo.username}}</span></p>
+                <button onclick="window.location.href = './view/Backstage/dataManage.html'"
+                    v-if="userinfo.permission>=3"> 后 台 </button>
+                <button onclick="window.location.href = './view/login/login.html'" v-if="userinfo.permission==0"> 登 录
+                </button>
+                <button @click="logout()" v-if="userinfo.permission!==0"> 退 出 </button>
+            </div>
         </div>
-        <!-- 菜单栏 -->
-        <ul id="menu">
-            <li title="首页" onclick="showData('all')">
-                <img src="./images/userAvatar/tourist.png" alt="" id="avatar">
-                <span id="username"></span>
-            </li>
-            <!-- 待拼接区 -->
-        </ul>
-    </div>
-    <!-- 内容区 -->
-    <div class="content" id="content">
-        <div class="title">
-            <!-- 标题 -->
-            <h1 id="titlename">北小齐工具箱</h1>
-        </div>
-        <table>
-            <tbody id="tbody">
-                <!-- 待拼接区 -->
 
-            </tbody>
-        </table>
+        <div class="group_container">
+            <ul class="group_list">
+                <li class="group_item" @click="changeGroup()">全部</li>
+                <li class="group_item" v-for="e in groupList" @click="changeGroup(e.name)">{{e.name}}</li>
+            </ul>
+        </div>
+
+        <div class="card_container" v-if="dataList.length==0">
+            <div class="card">
+                <img src="./img/noData.png" alt="">
+                <p class="card_name">暂无数据</p>
+                <p class="card_desc">请选择分组</p>
+            </div>
+        </div>
+
+        <div class="card_container" v-if="dataList.length!=0">
+            <div class="card" v-for="e in dataList">
+                <img :src="e.ico" id="card_appicon " alt="">
+                <p class="card_name">{{e.name}}</p>
+                <p class="card_desc">{{e.desc}}</p>
+
+                <div class="card_btns">
+                    <!-- <div class="collect_btn">
+                        <a href="" target="_blank">收藏</a>
+                    </div> -->
+                    <div class="view_btn">
+                        <a :href="e.src" target="_blank">查看</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加底部网站备案号以及网站信息 -->
+        <div class="footer">
+            <div class="footer_container">
+                <div class="footer_left">
+                    <p>北小齐珍藏</p>
+                    <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">豫ICP备2025111252号-1</a>
+                </div>
+                <div class="footer_right">
+                    <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">豫ICP备2025111252号</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="./js/index.js"></script>
+    <script type="module">
+        import { baseUrl } from "../../js/constant/url.js";
+
+        const token = localStorage.getItem("token");
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    // 请求头
+                    headers: { "Authorization": token },
+                    // 显示数据列表
+                    dataList: [],
+                    // 分组列表
+                    groupList: [],
+                    // 用户信息
+                    userinfo: { name: "da" },
+                }
+            },
+            methods: {
+                async getUserInfo(token) {
+                    let res = await axios.post(baseUrl + '/user/getUserByToken', {}, {
+                        headers: { 'Authorization': token }
+                    })
+                    this.userinfo = res.data.data
+                },
+
+                // 显示所有
+                async getDataList(group) {
+                    let res = [];
+                    if (group) {
+                        // 根据分组获取数据列表
+                        res = await axios.get(baseUrl + "/data/getDataByGroup", {
+                            headers: this.headers,
+                            params: {
+                                group: group
+                            }
+                        });
+                    } else {
+                        // 显示全部
+                        res = await axios.get(baseUrl + "/data/getDataByDimName", {
+                            headers: this.headers,
+                        });
+
+                    }
+                    if (res.data.data !== null) {
+                        this.dataList = res.data.data;
+                        return;
+                    }
+                },
+
+
+                // 获取分组列表
+                async getGroupList() {
+                    let res = await axios.get(baseUrl + "/group/getGroupList");
+                    this.groupList = res.data.data;
+                },
+
+
+                // 切换分组
+                changeGroup(group) {
+                    if (group) {
+                        this.getDataList(group); // 获取分组数据
+                        return;
+                    }
+                    this.getDataList(); // 获取全部数据
+                },
+
+                // 退出登录
+                async logout() {
+                    localStorage.setItem("token", "");
+                    window.location.href = 'index.html';
+                },
+            },
+            async mounted() {
+                await this.getDataList(); // 获取所有数据
+                await this.getGroupList(); // 获取分组列表
+                await this.getUserInfo(token);
+            }
+        }).mount("#app")
+    </script>
 </body>
 
 </html>

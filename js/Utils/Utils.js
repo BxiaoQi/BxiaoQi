@@ -23,7 +23,7 @@
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 
 // 函数作用:获取浏览器地址栏url?后面的参数
-function getParam() {
+export function getParam() {
     let url = window.location.search;
     let params = url.substring(1).split("&");
     let Object = {};
@@ -45,7 +45,7 @@ function getParam() {
 
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 // 函数作用:获取url锚点
-function geturlAnchor() {
+export function geturlAnchor() {
     return window.location.hash.substring(1);
 }
 // 调用语法:    geturlAnchor()
@@ -59,7 +59,7 @@ function geturlAnchor() {
 
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 // 函数作用:rgb色值转16进制色值
-function rgbToHex(r, g, b) {
+export function rgbToHex(r, g, b) {
     let arr = [];
     if (typeof r == "string") {
         arr = r.split("(")[1].split(")")[0].split(",");
@@ -83,7 +83,7 @@ function rgbToHex(r, g, b) {
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 
 // 函数作用:16进制色值转rgb色值
-function hexToRgb(hex, isArr) {
+export function hexToRgb(hex, isArr) {
     let r = parseInt(hex.slice(1, 3), 16);
     let g = parseInt(hex.slice(3, 5), 16);
     let b = parseInt(hex.slice(5, 7), 16);
@@ -106,7 +106,7 @@ function hexToRgb(hex, isArr) {
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 
 // 函数作用:数组去重
-function DelArrRep(arr) {
+export function DelArrRep(arr) {
     let newArr = [];
     for (let i = 0; i < arr.length; i++) {
         if (newArr.indexOf(arr[i]) == -1) {
@@ -125,7 +125,7 @@ function DelArrRep(arr) {
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 
 // 函数作用:生成随机数
-function RandomNum(min, max, length) {
+export function RandomNum(min, max, length) {
     if (max < min) {
         let temp = max;
         max = min;
@@ -153,7 +153,7 @@ function RandomNum(min, max, length) {
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 
 // 函数作用: 生成一个随机颜色值
-function RandomColor(isRgb) {
+export function RandomColor(isRgb) {
     let r = Math.floor(Math.random() * 256);
     let g = Math.floor(Math.random() * 256);
     let b = Math.floor(Math.random() * 256);
@@ -178,7 +178,7 @@ function RandomColor(isRgb) {
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 
 // 函数作用:数组排序
-function ArrSort(arr, isMax_Min) {
+export function ArrSort(arr, isMax_Min) {
     if (isMax_Min) {
         return arr.sort(function fun(a, b) { return b - a; });
     } else {
@@ -194,7 +194,7 @@ function ArrSort(arr, isMax_Min) {
 
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 // 函数作用:键盘监听事件
-function keyMonitor(e, dsq) {
+export function keyMonitor(e, dsq) {
     let body = document.getElementsByTagName("body")[0];
     let PromptBox = document.getElementById("PromptBox");
     clearTimeout(dsq);
@@ -225,25 +225,26 @@ function keyMonitor(e, dsq) {
 
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 // 函数作用: 消息提示
-function popup(inf, num, timeoutId) {
-    let body = document.getElementsByTagName("body")[0];
+export function popup(inf, num, timeoutId) {
     let popup = document.getElementById('popup');
-    if (popup == undefined) {
-        body.innerHTML = "<div id=\"popup\"></div>" + body.innerHTML
+    let colors = [
+        "#147EC9", // 蓝色(消息)
+        "#11AD45", // 绿色(成功)
+        "#E60914" // 红色(失败)
+    ];
+    if (popup == undefined) {// 创建一个新的 div 元素
+        var popupDiv = document.createElement('div');
+        // 设置 id 属性
+        popupDiv.id = 'popup';
+        // 将新创建的 div 添加到 body 中
+        document.body.appendChild(popupDiv);
         // 添加样式
         popup = document.getElementById('popup');
         popup.style = "padding: 20px;position: fixed;bottom: 5%;left: 50%;transform: translate(-50%, -50%);border-radius: 15px;";
     }
     // 清除任何现有超时以防止隐藏先前的单击
     clearTimeout(timeoutId);
-
-    if (num == 1) {
-        popup.style.backgroundColor = "#11AD45";
-    } else if (num == -1) {
-        popup.style.backgroundColor = "#E60914";
-    } else if (num == 0) {
-        popup.style.backgroundColor = "#147EC9";
-    }
+    popup.style.backgroundColor = colors[num];
     popup.innerText = inf;
     popup.style.display = 'block';
 
@@ -264,7 +265,7 @@ function popup(inf, num, timeoutId) {
 
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 // 函数作用: 获取当前时间
-function getTime(isStr) {
+export function getTime(isStr) {
     function temp(num) {
         return (num < 10 ? ("0" + num) : num).toString();
     }
@@ -287,7 +288,7 @@ function getTime(isStr) {
 
 /* ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== */
 // 函数作用:序列化表单数据(原作者:周老师)
-function serialize(form, isjson) {
+export function serialize(form, isjson) {
     let params = [];
     if (isjson) {
         params = {};
@@ -360,7 +361,7 @@ function serialize(form, isjson) {
  * @returns {Object} form 表单对象
  * 
  */
-function showForm(form, obj) {
+export function showForm(form, obj) {
     let keys = Object.keys(obj);
     for (let i = 0; i < form.elements.length; i++) {
         let field = form.elements[i];
@@ -383,7 +384,7 @@ function showForm(form, obj) {
  * @param {Object} obj 请求对象
  * @returns {Object} 返回xhr对象
  */
-function ajax(obj) {
+export function ajax(obj) {
     let xhr = new XMLHttpRequest();
     xhr.open(obj.type, obj.url, true);
     xhr.onreadystatechange = function () {
@@ -415,7 +416,7 @@ function ajax(obj) {
  * @param {String} fmt 格式化字符串
  * @returns {String} 格式化后的日期字符串
  */
-function dateformat(date = new Date(), fmt = "yyyy-MM-dd hh:mm:ss.SSS") {
+export function dateformat(date = new Date(), fmt = "yyyy-MM-dd hh:mm:ss.SSS") {
     let o = {
         "yyyy": date.getFullYear(),
         "MM": date.getMonth() + 1,

@@ -1,0 +1,139 @@
+@charset "utf-8";
+/*
+ *Last modified: 2022-06-25 18:38:36
+ *Url: https://www.axui.cn
+*/
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+body {
+  background-image: url(../imgs/login-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.login {
+  width: 1000px;
+  background-color: #fff;
+}
+.login .cover {
+  background-image: url(../imgs/login-left.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.login .core {
+  padding-left: 28px;
+}
+.footer {
+  color: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  text-align: center;
+  padding: 1.4rem 0;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+.footer a {
+  color: rgba(255, 255, 255, 0.5);
+}
+@media screen and (max-width: 900px) {
+  body.ax-align-origin {
+    background-image: none;
+    display: block;
+  }
+  .login {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .login .cover {
+    height: 20rem;
+    border-radius: 0;
+  }
+  .login .core {
+    padding-left: 0;
+  }
+  .login form {
+    margin: 0;
+  }
+  .footer {
+    position: inherit;
+    color: #666666;
+  }
+  .footer a {
+    color: #666666;
+  }
+}
+
+.load-box {
+  display: none;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+/* From Uiverse.io by bociKond */
+.spinner {
+  width: 70.4px;
+  height: 70.4px;
+  --clr: rgb(82, 177, 255);
+  --clr-alpha: rgb(82, 177, 255, .1);
+  animation: spinner 1.6s infinite ease;
+  transform-style: preserve-3d;
+}
+
+.spinner>div {
+  background-color: var(--clr-alpha);
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  border: 3.5px solid var(--clr);
+}
+
+.spinner div:nth-of-type(1) {
+  transform: translateZ(-35.2px) rotateY(180deg);
+}
+
+.spinner div:nth-of-type(2) {
+  transform: rotateY(-270deg) translateX(50%);
+  transform-origin: top right;
+}
+
+.spinner div:nth-of-type(3) {
+  transform: rotateY(270deg) translateX(-50%);
+  transform-origin: center left;
+}
+
+.spinner div:nth-of-type(4) {
+  transform: rotateX(90deg) translateY(-50%);
+  transform-origin: top center;
+}
+
+.spinner div:nth-of-type(5) {
+  transform: rotateX(-90deg) translateY(50%);
+  transform-origin: bottom center;
+}
+
+.spinner div:nth-of-type(6) {
+  transform: translateZ(35.2px);
+}
+
+@keyframes spinner {
+  0% {
+      transform: rotate(45deg) rotateX(-25deg) rotateY(25deg);
+  }
+
+  50% {
+      transform: rotate(45deg) rotateX(-385deg) rotateY(25deg);
+  }
+
+  100% {
+      transform: rotate(45deg) rotateX(-385deg) rotateY(385deg);
+  }
+}

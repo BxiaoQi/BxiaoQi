@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/Utils/vue.global.js"></script>
+    <script src="./js/Utils/axios1.6.7.min.js"></script>
+    <link rel="stylesheet" href="../../css/Backstage.css">
+    <title>北小齐珍藏 | 用户管理</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="menu">
+            <a href="../../index.html"><img src="../../logo.png" alt=""></img></a>
+
+            <ul>
+                <li><a href="./dataManage.html">数据管理</a></li>
+                <li><a href="./groupManage.html">分组管理</a></li>
+                <li class="active"><a href="">用户管理</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div class="top">
+                <p>北小齐珍藏 后台管理</p>
+                <div class="account">
+                    <img id="avatar" src="../../imgs/TX_1.png"></img>
+                    <i class="gap"></i>
+                    <span>账号:</span>
+                    <span id="username">admin</span>
+                    <i class="gap"></i>
+                    <i class="gap"></i>
+                    <span id="logout">退出登录</span>
+                </div>
+            </div>
+            <div class="title">
+                <div class="suptitle">
+                    <a href="../index.html">北小齐珍藏</a>
+                    <span>/</span>
+                    <a href="">用户管理</a>
+                </div>
+                &emsp;
+                <span>用户管理</span>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { baseUrl } from "../../js/constant/url.js";
+        
+        const { createApp } = Vue;
+        const token = localStorage.getItem("token");
+        createApp({
+            data() {
+                return {
+                    // 数据列表
+                    dataList: [],
+                }
+            },
+            methods: {
+                // 显示所有
+                async showAll() {
+                    let res = await axios.get(baseUrl + "/data/getDataByDimName");
+                    this.dataList = res.data.data;
+                }
+            },
+            // 挂载完毕执行
+            mounted() {
+                this.showAll(); // 显示所有
+            }
+        }).mount("#app");
+    </script>
+    </script>
+</body>
+
+</html>
