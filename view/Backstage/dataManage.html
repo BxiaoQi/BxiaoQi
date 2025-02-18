@@ -101,6 +101,19 @@
         .img_from_box img {
             width: 100%;
         }
+
+        #datadesc{
+            padding: 5px;
+            
+            outline: none;
+        }
+
+        .from_icon{
+            margin-left: 5px;
+            vertical-align: middle;
+            width: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -114,7 +127,7 @@
                 <br>
                 <label for="datasrc">网站：<span>*</span></label>
                 <input type="text" id="datasrc" class="ipt" placeholder="请输入网站" v-model="formData.src"></input>
-                <a :href="formData.src" target="_blank">→</a>
+                <a :href="formData.src" target="_blank"><img src="../../imgs/icon/icon_go.png" alt="" class="from_icon"></a>
                 <br>
                 <label for="datadesc">描述：<span>*</span></label>
                 <textarea name="datadesc" id="datadesc" cols="27" rows="3" v-model="formData.desc"></textarea>
@@ -137,6 +150,7 @@
                 <br>
                 <label for="dataico">图标：</label>
                 <input type="text" id="dataico" class="ipt" placeholder="请输入图标" v-model="formData.ico"></input>
+                <img src="../../imgs/icon/icon_delete.png" alt="" id="dataico_delete" class="from_icon">
                 <div class="img_from_box">
                     <img :src="formData.ico" alt="">
                 </div>
@@ -447,8 +461,11 @@
                         name: data.name,
                         desc: data.desc,
                         src: data.src,
-                        ico: data.ico
+                        permission: data.permission,
+                        ico: data.ico,
+                        group: data.group
                     };
+                    
                     let options = document.getElementById("datapermission").options;
                     for (let i = 0; i < options.length; i++) {
                         if (options[i].value == data.permission) {
