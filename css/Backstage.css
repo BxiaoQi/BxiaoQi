@@ -334,3 +334,71 @@ body {
     font-size: 14px;
     padding: 16px 40px;
 }
+
+
+/* =============================添加表单 */
+
+
+.add_form {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.555);
+    position: absolute;
+    z-index: 5;
+}
+
+.add_form_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px 50px;
+    background-color: antiquewhite;
+    border-radius: 10px;
+}
+
+.add_form_box label {
+    display: inline-block;
+    width: 60px;
+}
+
+.add_form_box .ipt {
+    margin: 10px 0;
+}
+
+.add_from_box {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+
+.add_from_box button {
+    border-radius: 5px;
+}
+
+.img_from_box {
+    width: 70px;
+    margin: auto;
+}
+
+.img_from_box img {
+    width: 100%;
+}
+
+.from_icon {
+    margin-left: 5px;
+    vertical-align: middle;
+    width: 20px;
+    cursor: pointer;
+}
+
+
+#datadesc {
+    padding: 5px;
+    outline: none;
+}
+
+
+/* ============================= */

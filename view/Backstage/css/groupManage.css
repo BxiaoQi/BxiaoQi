@@ -1,0 +1,33 @@
+/* 编号 */
+.tab_id {
+    width: 5%;
+    max-width: 5%;
+}
+
+
+/* 名称 */
+.tab_name {
+    width: 15%;
+    max-width: 15%;
+}
+
+
+/* 日期 */
+.tab_createdate{
+    width: 15%;
+    max-width: 15%;
+}
+
+
+/* 图标 */
+.tab_icon {
+    width: 10%;
+    max-width: 10%;
+}
+
+
+/* 操作 */
+.tab_operation{
+    width: 10%;
+    max-width: 10%;
+}
