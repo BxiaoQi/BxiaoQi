@@ -8,113 +8,9 @@
     <script src="../../js/Utils/axios1.6.7.min.js"></script>
     <script type="module" src="../../js/Utils/Tools.js"></script>
     <link rel="stylesheet" href="../../css/Backstage.css">
+    <link rel="stylesheet" href="./css/dataManage.css">
+
     <title>北小齐珍藏 | 数据管理</title>
-    <style>
-        /* 编号 */
-        .tab_id {
-            width: 2%;
-            max-width: 2%;
-        }
-
-
-        /* 名称 */
-        .tab_name {
-            width: 4%;
-            max-width: 4%;
-        }
-
-        /* 描述 */
-        .tab_desc {
-            width: 15%;
-            max-width: 15%;
-        }
-
-        /* 网站 */
-        .tab_src {
-            width: 10%;
-            max-width: 10%;
-        }
-
-        /* 权限 */
-        .tab_permission {
-            width: 3%;
-            max-width: 3%;
-        }
-
-        /* 图标 */
-        .tab_icon {
-            width: 2%;
-            max-width: 2%;
-        }
-
-        /* 分组 */
-        .tab_group {
-            position: relative;
-            width: 3%;
-            max-width: 3%;
-        }
-
-        .add_form {
-            display: none;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.555);
-            position: absolute;
-            z-index: 5;
-        }
-
-        .add_form_box {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 30px 50px;
-            background-color: antiquewhite;
-            border-radius: 10px;
-        }
-
-        .add_form_box label {
-            display: inline-block;
-            width: 60px;
-        }
-
-        .add_form_box .ipt {
-            margin: 10px 0;
-        }
-
-        .add_from_box {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-
-        .add_from_box button {
-            border-radius: 5px;
-        }
-
-        .img_from_box {
-            width: 70px;
-            margin: auto;
-        }
-
-        .img_from_box img {
-            width: 100%;
-        }
-
-        #datadesc {
-            padding: 5px;
-
-            outline: none;
-        }
-
-        .from_icon {
-            margin-left: 5px;
-            vertical-align: middle;
-            width: 20px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 
 <body>
@@ -309,6 +205,7 @@
                     })
                     this.userinfo = res.data.data
                 },
+
                 
                 // 显示所有
                 async getDataList(group) {
@@ -343,22 +240,8 @@
                 },
 
 
-                // 切换分组
-                changeGroup() {
-                    let group = document.getElementById("select_group").value;
-                    if (group == "all") {
-                        this.groupname = "分组"; // 更新分组名称
-                        this.getDataList(); // 获取全部数据
-                        return;
-                    }
-                    this.groupname = group; // 更新分组名称
-                    this.getDataList(group); // 获取分组数据
-                },
-
-
                 // 搜索
                 async search() {
-
                     // 优先根据id查询
                     let res = await axios.get(baseUrl + "/data/getDataById", {
                         headers: this.headers,
@@ -433,18 +316,6 @@
                     }
                 },
 
-                // 显示表单
-                showForm() {
-                    document.getElementById("add_form").style.display = "block";
-                },
-
-                // 隐藏表单
-                hideForm() {
-                    this.resetForm();
-                    document.getElementById("add_form").style.display = "none";
-                    this.btnname = "添加";
-                },
-
 
                 // 编辑数据
                 async edit(id) {
@@ -503,11 +374,40 @@
                     }
                 },
 
+
+                // 切换分组
+                changeGroup() {
+                    let group = document.getElementById("select_group").value;
+                    if (group == "all") {
+                        this.groupname = "分组"; // 更新分组名称
+                        this.getDataList(); // 获取全部数据
+                        return;
+                    }
+                    this.groupname = group; // 更新分组名称
+                    this.getDataList(group); // 获取分组数据
+                },
+
+
                 // 退出登录
                 async logout() {
                     localStorage.setItem("token", "");
                     window.location.href = '../../index.html';
                 },
+
+
+                // 显示表单
+                showForm() {
+                    document.getElementById("add_form").style.display = "block";
+                },
+
+
+                // 隐藏表单
+                hideForm() {
+                    this.resetForm();
+                    document.getElementById("add_form").style.display = "none";
+                    this.btnname = "添加";
+                },
+
 
                 // 恢复表单值
                 resetForm() {
@@ -524,6 +424,7 @@
                     document.getElementById("datagroup").options[0].selected = true;
                 },
 
+
                 // 刷新数据列表
                 upDataList() {
                     this.dataList = [];
@@ -534,6 +435,7 @@
                     }
                     this.getDataList();
                 },
+
 
                 // 判断权限
                 async checkPermission() {
