@@ -102,13 +102,13 @@
             width: 100%;
         }
 
-        #datadesc{
+        #datadesc {
             padding: 5px;
-            
+
             outline: none;
         }
 
-        .from_icon{
+        .from_icon {
             margin-left: 5px;
             vertical-align: middle;
             width: 20px;
@@ -127,7 +127,8 @@
                 <br>
                 <label for="datasrc">网站：<span>*</span></label>
                 <input type="text" id="datasrc" class="ipt" placeholder="请输入网站" v-model="formData.src"></input>
-                <a :href="formData.src" target="_blank"><img src="../../imgs/icon/icon_go.png" alt="" class="from_icon"></a>
+                <a :href="formData.src" target="_blank"><img src="../../imgs/icon/icon_go.png" alt=""
+                        class="from_icon"></a>
                 <br>
                 <label for="datadesc">描述：<span>*</span></label>
                 <textarea name="datadesc" id="datadesc" cols="27" rows="3" v-model="formData.desc"></textarea>
@@ -150,16 +151,18 @@
                 <br>
                 <label for="dataico">图标：</label>
                 <input type="text" id="dataico" class="ipt" placeholder="请输入图标" v-model="formData.ico"></input>
-                <img src="../../imgs/icon/icon_delete.png" alt="" id="dataico_delete" class="from_icon">
+                <img src="../../imgs/icon/icon_delete.png" alt="" id="dataico_delete" class="from_icon"
+                    @click="()=>{formData.ico=''}">
                 <div class="img_from_box">
                     <img :src="formData.ico" alt="">
                 </div>
                 <div class="add_from_box">
-                    <button @click="()=>{formData=emptyFormData;this.hideForm()}" class="btn rbtn">取消</button>
+                    <button @click="hideForm" class="btn rbtn">取消</button>
                     <button @click="addData" class="btn">{{btnname}}</button>
                 </div>
             </div>
         </div>
+
         <!-- 左侧菜单栏 -->
         <div class="menu">
             <a href="../../index.html"><img src="../../logo.png" alt=""></img></a>
@@ -237,6 +240,9 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr v-if="dataList.length==0">
+                                <td colspan="8">暂无数据</td>
+                            </tr>
                             <tr v-for="e in dataList">
                                 <td :title="e.id" class="tab_id">{{e.id}}</td>
                                 <td :title="e.name" class="tab_name">{{e.name}}</td>
@@ -291,15 +297,7 @@
                     btnname: "添加",
 
                     // 表单数据
-                    formData: {
-                        id: -1,
-                        name: "",
-                        desc: "",
-                        src: "",
-                        permission: 0,
-                        ico: "https://s3.uuu.ovh/imgs/2025/02/09/1f68c4bc14e04142.png",
-                        group: "在线工具"
-                    },
+                    formData: {},
 
                 }
             },
@@ -311,6 +309,7 @@
                     })
                     this.userinfo = res.data.data
                 },
+                
                 // 显示所有
                 async getDataList(group) {
                     let res = [];
@@ -403,11 +402,11 @@
                 async addData() {
                     let res = "";
                     if (this.formData.name === "" || this.formData.desc === "" || this.formData.src === "") {
-                        alert("请填写完整信息");
+                        timeoutId = popup("请填写完整信息", 1, timeoutId);
                         return;
                     }
                     if (this.formData.ico === "") {
-                        this.formData.ico = "http://124.222.56.109/images/appicon/icon.png";
+                        this.formData.ico = "https://s21.ax1x.com/2025/02/18/pEMUkQA.png";
                     }
                     // 添加
                     if (this.formData.id === -1) {
@@ -426,7 +425,7 @@
                         } else {
                             timeoutId = popup("修改成功", 1, timeoutId);
                         }
-                        this.upDataList();
+                        this.upDataList(true);
                         this.hideForm();
                     } else {
                         alert(res.data.message);
@@ -441,6 +440,7 @@
 
                 // 隐藏表单
                 hideForm() {
+                    this.resetForm();
                     document.getElementById("add_form").style.display = "none";
                     this.btnname = "添加";
                 },
@@ -465,7 +465,7 @@
                         ico: data.ico,
                         group: data.group
                     };
-                    
+
                     let options = document.getElementById("datapermission").options;
                     for (let i = 0; i < options.length; i++) {
                         if (options[i].value == data.permission) {
@@ -496,7 +496,7 @@
                         });
                         if (res.data.code == 200) {
                             timeoutId = popup("删除成功", 1, timeoutId);
-                            this.upDataList();
+                            this.upDataList(true);
                         } else {
                             alert(res.data.message);
                         }
@@ -509,20 +509,25 @@
                     window.location.href = '../../index.html';
                 },
 
-                // 刷新数据列表
-                upDataList() {
-                    this.dataList = [];
+                // 恢复表单值
+                resetForm() {
                     this.formData = {
                         id: -1,
                         name: "",
                         desc: "",
                         src: "",
                         permission: 0,
-                        ico: "https://s3.uuu.ovh/imgs/2025/02/09/1f68c4bc14e04142.png",
+                        ico: "https://s21.ax1x.com/2025/02/18/pEMUkQA.png",
                         group: "在线工具"
                     };
                     document.getElementById("datapermission").options[0].selected = true;
                     document.getElementById("datagroup").options[0].selected = true;
+                },
+
+                // 刷新数据列表
+                upDataList() {
+                    this.dataList = [];
+                    this.resetForm();
                     if (this.groupname !== "分组") {
                         this.getDataList(this.groupname);
                         return;
@@ -554,6 +559,7 @@
                 await this.getDataList(); // 获取所有数据
                 await this.getGroupList(); // 获取分组列表
                 await this.getUserInfo(); // 获取用户信息
+                this.resetForm() // 重置表单值
             }
         }).mount("#app");
     </script>

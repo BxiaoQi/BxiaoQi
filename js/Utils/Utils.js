@@ -240,7 +240,7 @@ export function popup(inf, num, timeoutId) {
         document.body.appendChild(popupDiv);
         // 添加样式
         popup = document.getElementById('popup');
-        popup.style = "padding: 20px;position: fixed;bottom: 5%;left: 50%;transform: translate(-50%, -50%);border-radius: 15px;";
+        popup.style = "padding: 20px;position: fixed;bottom: 5%;left: 50%;transform: translate(-50%, -50%);border-radius: 15px;z-index: 9999;";
     }
     // 清除任何现有超时以防止隐藏先前的单击
     clearTimeout(timeoutId);
