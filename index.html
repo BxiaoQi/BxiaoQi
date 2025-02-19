@@ -7,56 +7,82 @@
     <script src="./js/Utils/axios1.6.7.min.js"></script>
     <script src="./js/Utils/vue.global.js"></script>
     <link rel="stylesheet" href="./css/index.css">
-    </link>
     <title>北小齐珍藏</title>
 </head>
 
 <body>
     <div id="app">
-        <div class="header">
-            <div class="header_left">
-                <img src="./logo.png" alt="">
+        <div class="header_box">
+            <div class="header">
+                <div class="header_left">
+                    <img src="./logo.png" alt="">
+                </div>
+                <div class="header_right">
+                    <p>当前用户：<span id="username">{{userinfo.username}}</span></p>
+                    <button onclick="window.location.href = './view/Backstage/dataManage.html'"
+                        v-if="userinfo.permission>=3"> 后 台 </button>
+                    <button onclick="window.location.href = './view/login/login.html'" v-if="userinfo.permission==0"> 登
+                        录
+                    </button>
+                    <button @click="logout()" v-if="userinfo.permission!==0"> 退 出 </button>
+                </div>
             </div>
-            <div class="header_right">
-                <p>当前用户：<span id="username">{{userinfo.username}}</span></p>
-                <button onclick="window.location.href = './view/Backstage/dataManage.html'"
-                    v-if="userinfo.permission>=3"> 后 台 </button>
-                <button onclick="window.location.href = './view/login/login.html'" v-if="userinfo.permission==0"> 登 录
-                </button>
-                <button @click="logout()" v-if="userinfo.permission!==0"> 退 出 </button>
+
+
+        </div>
+
+        <div class="card_container" id="card_container" v-if="dataList.length==0">
+
+            <!-- 分组 -->
+            <div class="group_container">
+                <div class="group_item" @click="changeGroup()">
+                    <img src="https://s21.ax1x.com/2025/02/19/pEMx7kj.png" alt="">全部
+                </div>
+                <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList">
+                    <img :src="e.ico" alt=""> {{e.name}}
+                </div>
+            </div>
+
+            <!-- 卡片盒子 -->
+            <div class="card_box">
+                <div class="card  card-enter-active">
+                    <img src="./img/noData.png" alt="">
+                    <p class="card_name">暂无数据</p>
+                    <p class="card_desc">请选择分组</p>
+                </div>
             </div>
         </div>
 
-        <div class="group_container">
-            <ul class="group_list">
-                <li class="group_item" @click="changeGroup()">全部</li>
-                <li class="group_item" v-for="e in groupList" @click="changeGroup(e.name)">{{e.name}}</li>
-            </ul>
-        </div>
+        <div class="card_container" id="card_container" v-if="dataList.length!=0">
 
-        <div class="card_container" v-if="dataList.length==0">
-            <div class="card">
-                <img src="./img/noData.png" alt="">
-                <p class="card_name">暂无数据</p>
-                <p class="card_desc">请选择分组</p>
+            <!-- 分组 -->
+            <div class="group_container">
+                <div class="group_item" @click="changeGroup()">
+                    <img src="https://s21.ax1x.com/2025/02/19/pEMx7kj.png" alt="" v-if="isMobile==false"><span>全部</span>
+                </div>
+                <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList">
+                    <img :src="e.ico" alt="" v-if="isMobile==false"><span>{{e.name}}</span>
+                </div>
             </div>
-        </div>
 
-        <div class="card_container" v-if="dataList.length!=0">
-            <div class="card" v-for="e in dataList">
-                <img :src="e.ico" id="card_appicon " alt="">
-                <p class="card_name">{{e.name}}</p>
-                <p class="card_desc">{{e.desc}}</p>
+            <!-- 卡片盒子 -->
+            <div class="card_box">
+                <div class="card card-enter-active" v-for="e in dataList">
+                    <img :src="e.ico" id="card_appicon " alt="">
+                    <p class="card_name">{{e.name}}</p>
+                    <p class="card_desc">{{e.desc}}</p>
 
-                <div class="card_btns">
-                    <!-- <div class="collect_btn">
-                        <a href="" target="_blank">收藏</a>
-                    </div> -->
-                    <div class="view_btn">
-                        <a :href="e.src" target="_blank">查看</a>
+                    <div class="card_btns">
+                        <!-- <div class="collect_btn">
+                                <a href="" target="_blank">收藏</a>
+                            </div> -->
+                        <div class="view_btn">
+                            <a :href="e.src" target="_blank">查看</a>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- 添加底部网站备案号以及网站信息 -->
@@ -88,6 +114,8 @@
                     groupList: [],
                     // 用户信息
                     userinfo: { name: "da" },
+                    // 是否是移动端
+                    isMobile: false,
                 }
             },
             methods: {
@@ -139,6 +167,15 @@
                     this.getDataList(); // 获取全部数据
                 },
 
+                // 判断是否是移动端
+                isMobileM() {
+                    if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
+                        this.isMobile = true;
+                    } else {
+                        this.isMobile = false;
+                    }
+                },
+
                 // 退出登录
                 async logout() {
                     localStorage.setItem("token", "");
@@ -146,6 +183,7 @@
                 },
             },
             async mounted() {
+                this.isMobileM(); // 判断是否移动端
                 await this.getDataList(); // 获取所有数据
                 await this.getGroupList(); // 获取分组列表
                 await this.getUserInfo(token);

@@ -7,17 +7,66 @@ body {
     background-color: #f5f5f5;
 }
 
+#app {
+    width: 100%;
+}
+
+.group_container {
+    width: 150px;
+    max-width: 20%;
+    height: 100%;
+    padding: 10px;
+    overflow: auto;
+    background-color: #666;
+}
+
+.group_container img {
+    width: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.group_item {
+    /* 强制不换行 */
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.group_item span {
+    display: inline-block;
+    width: 70px;
+}
+
+.group_item:hover {
+    transform: translateY(-5px);
+    background-color: rgb(122, 255, 178);
+}
+
 .card_container {
     display: flex;
+    height: calc(100vh - 180px);
+    padding-bottom: 20px;
+    overflow-y: hidden;
+}
+
+.card_box {
+    display: flex;
+    height: calc(100vh - 180px);
     flex-direction: row;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    border-top: 1px solid rgb(221, 221, 221);
-    padding-top: 10px;
+    align-items: start;
+    padding: 10px;
+    padding-bottom: 20px;
+    overflow-y: auto;
 }
+
 
 /* 卡片 */
 .card {
@@ -35,6 +84,24 @@ body {
     box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.062);
     border-radius: 20px;
     transition: all 0.3s ease;
+}
+
+/* 定义动画 */
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 应用动画 */
+.card-enter-active {
+    animation: cardSlideUp 1s ease-out;
 }
 
 .card:hover {
@@ -126,44 +193,11 @@ body {
     transition-duration: .2s;
 }
 
-.group_list {
-    /* 横向内容超出加滚动条 */
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    gap: 8px;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    padding-top: 5px;
-    flex-wrap: nowrap;
-    overflow: auto;
-}
-
-.group_item {
-    width: 100px;
-    /* 强制不换行 */
-    white-space: nowrap;
-    text-align: center;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.group_item:hover {
-    transform: translateY(-5px);
-    background-color: rgb(122, 255, 178);
-}
-
 .footer {
     position: fixed;
     width: 100%;
     bottom: 0;
-    margin-top: 20px;
-    padding: 20px;
+    padding: 10px;
     background-color: #dfdfdf;
     text-align: center;
     color: #666;
