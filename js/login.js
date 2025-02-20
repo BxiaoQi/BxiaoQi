@@ -76,16 +76,18 @@ async function register() {
         return;
     }
     let params = { username: username, password: password };
-    res = await axios.post(baseUrl + "/user/register", params, {
+    var res = await axios.post(baseUrl + "/user/register", params, {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         }
     });
     if (res.data.code == 200) {
         timeoutId = popup("注册成功", 1, timeoutId);
-        window.location.href = "./login.html";
+        setTimeout(() => {
+            window.location.href = "./login.html";
+        }, 2000);
     } else {
-        alert(res.data.message);
+        timeoutId = popup(res.data.message, 2, timeoutId);
         return;
     }
 }
