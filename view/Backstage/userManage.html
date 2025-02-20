@@ -110,6 +110,7 @@
                                 <th class="tab_phone">手机号</th>
                                 <th class="tab_email">邮箱</th>
                                 <th class="tab_permission">权限</th>
+                                <th class="tab_logintime">登录日期</th>
                                 <th class="tab_createdate">修改日期</th>
                                 <th class="tab_operation">操作</th>
                             </tr>
@@ -137,8 +138,10 @@
                                 <td :title="e.permission" v-else-if="e.permission==3" class="tab_permission">管理员</td>
                                 <td :title="e.permission" v-else-if="e.permission==4" class="tab_permission">超级管理员</td>
                                 <td :title="e.permission" v-else="e.permission>=5" class="tab_permission">开发者</td>
+                                <!-- 登录日期 -->
+                                <td :title="e.logintime" class="tab_logintime">{{convertTime(e.logintime)}}</td>
                                 <!-- 修改日期 -->
-                                <td :title="e.recorddate" class="tab_recorddate">{{e.recorddate}}</td>
+                                <td :title="e.recorddate" class="tab_recorddate">{{convertTime(e.recorddate)}}</td>
                                 <!-- 操作 -->
                                 <td class="tab_operation">
                                     <button class="btn" @click="edit(e.id)" v-if="e.id!==6">编辑</button>
@@ -156,7 +159,7 @@
 
     <script type="module">
         import { baseUrl } from "../../js/constant/url.js";
-        import { popup } from "../../js/Utils/Utils.js";
+        import { popup, dateformat } from "../../js/Utils/Utils.js";
 
         const token = localStorage.getItem("token");
         const { createApp } = Vue;
@@ -363,6 +366,15 @@
                         window.location.href = '../../index.html';
                     }
                 },
+
+
+                // 时间格式转换
+                convertTime(timeString) {
+                    // 将字符串转换为Date对象
+                    const date = new Date(timeString);
+
+                    return dateformat(date,"yyyy年MM月dd hh:mm:ss");
+                }
 
 
 

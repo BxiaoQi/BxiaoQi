@@ -31,11 +31,16 @@
     width: 5%;
     max-width: 5%;
 }
+/* 登录日期 */
+.tab_logintime{
+    width: 10%;
+    max-width: 10%;
+}
 
 /* 修改日期 */
 .tab_createdate{
-    width: 15%;
-    max-width: 15%;
+    width: 10%;
+    max-width: 10%;
 }
 
 /* 操作 */

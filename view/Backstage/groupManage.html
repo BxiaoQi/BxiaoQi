@@ -93,7 +93,7 @@
                             <tr>
                                 <th class="tab_id">编号</th>
                                 <th class="tab_name">名称</th>
-                                <th class="tab_createdate">日期</th>
+                                <th class="tab_createdate">创建日期</th>
                                 <th class="tab_icon">图标</th>
                                 <th class="tab_operation">操作</th>
                             </tr>
@@ -108,7 +108,7 @@
                                 <!-- 名称 -->
                                 <td :title="e.name" class="tab_name">{{e.name}}</td>
                                 <!-- 日期 -->
-                                <td :title="e.createdate" class="tab_createdate">{{e.createdate}}</td>
+                                <td :title="e.createdate" class="tab_createdate">{{ convertTime(e.createdate) }}</td>
                                 <!-- 图标 -->
                                 <td :title="e.ico" class="tab_icon">
                                     <a :href="e.ico" target="_blank">
@@ -132,7 +132,7 @@
 
     <script type="module">
         import { baseUrl } from "../../js/constant/url.js";
-        import { popup } from "../../js/Utils/Utils.js";
+        import { popup, dateformat } from "../../js/Utils/Utils.js";
 
         const token = localStorage.getItem("token");
         const { createApp } = Vue;
@@ -360,6 +360,15 @@
                         window.location.href = '../../index.html';
                     }
                 },
+
+
+                // 时间格式转换
+                convertTime(timeString) {
+                    // 将字符串转换为Date对象
+                    const date = new Date(timeString);
+
+                    return dateformat(date, "yyyy年MM月dd hh:mm:ss");
+                }
 
 
 
