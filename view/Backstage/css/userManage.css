@@ -1,0 +1,49 @@
+/* 编号 */
+.tab_id {
+    width: 5%;
+    max-width: 5%;
+}
+
+
+/* 名称 */
+.tab_username {
+    width: 10%;
+    max-width: 10%;
+}
+
+
+/* 手机号 */
+.tab_phone{
+    width: 8%;
+    max-width: 8%;
+}
+
+
+/* 邮箱 */
+.tab_email {
+    width: 8%;
+    max-width: 8%;
+}
+
+
+/* 权限 */
+.tab_permission{
+    width: 5%;
+    max-width: 5%;
+}
+
+/* 修改日期 */
+.tab_createdate{
+    width: 15%;
+    max-width: 15%;
+}
+
+/* 操作 */
+.tab_operation{
+    width: 10%;
+    max-width: 10%;
+}
+
+.add_form_box label{
+    width: 75px;
+}

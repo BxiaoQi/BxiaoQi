@@ -163,6 +163,9 @@
                     let res = await axios.post(baseUrl + '/user/getUserByToken', {}, {
                         headers: { 'Authorization': token }
                     })
+                    if (res.data.data.id == 0) {
+                        localStorage.setItem("token", "");
+                    }
                     this.userinfo = res.data.data
                 },
 

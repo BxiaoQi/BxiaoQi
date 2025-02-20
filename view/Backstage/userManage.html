@@ -4,16 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./js/Utils/vue.global.js"></script>
-    <script src="./js/Utils/axios1.6.7.min.js"></script>
+    <script src="../../js/Utils/vue.global.js"></script>
+    <script src="../../js/Utils/axios1.6.7.min.js"></script>
+    <script type="module" src="../../js/Utils/Tools.js"></script>
     <link rel="stylesheet" href="../../css/Backstage.css">
+    <link rel="stylesheet" href="./css/userManage.css">
+
     <title>北小齐珍藏 | 用户管理</title>
-    <style>
-    </style>
 </head>
 
 <body>
     <div id="app">
+        <!-- 添加数据表单 -->
+        <div class="add_form" id="add_form">
+            <div class="add_form_box">
+                <label for="dataname">用户名：<span>*</span></label>
+                <input type="text" id="dataname" class="ipt" placeholder="请输入名称" v-model="formData.username"></input>
+                <br>
+
+                <label for="dataphone">手机号：</label>
+                <input type="text" id="dataphone" class="ipt" placeholder="请输入手机号" v-model="formData.phone"></input>
+                <br>
+
+                <label for="dataemail">邮箱：</label>
+                <input type="text" id="dataemail" class="ipt" placeholder="请输入邮箱" v-model="formData.email"></input>
+                <br>
+
+                <label for="datapermission">权限：</label>
+                <select name="datapermission" id="datapermission" class="ipt"
+                    @change="(e)=>{formData.permission=e.target.value}">
+                    <option value="0">游客</option>
+                    <option value="1">用户</option>
+                    <option value="2">会员</option>
+                    <option value="3">管理员</option>
+                    <option value="4">超级管理员</option>
+                    <option value="5">开发者</option>
+                </select>
+                <br>
+
+                <div class="add_from_box">
+                    <button @click="hideForm" class="btn rbtn">取消</button>
+                    <button @click="addData" class="btn">修改</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 左侧菜单栏 -->
         <div class="menu">
             <a href="../../index.html"><img src="../../logo.png" alt=""></img></a>
 
@@ -23,55 +59,322 @@
                 <li class="active"><a href="">用户管理</a></li>
             </ul>
         </div>
+
         <div class="content">
-            <div class="top">
-                <p>北小齐珍藏 后台管理</p>
-                <div class="account">
-                    <img id="avatar" src="../../imgs/TX_1.png"></img>
-                    <i class="gap"></i>
-                    <span>账号:</span>
-                    <span id="username">admin</span>
-                    <i class="gap"></i>
-                    <i class="gap"></i>
-                    <span id="logout">退出登录</span>
+            <!-- 顶部信息栏 -->
+            <div class="header">
+                <div class="header_left">
+                    <p>北小齐珍藏 后台管理</p>
+                </div>
+                <div class="header_right">
+                    <p>当前用户：<span id="username">{{userinfo.username}}</span></p>
+                    <button onclick="window.location.href = '../../index.html'" v-if="userinfo.permission>=3"> 前 台
+                    </button>
+                    <button @click="logout()" v-if="userinfo.permission!==0"> 退 出 </button>
                 </div>
             </div>
+
+            <!-- 标题栏 -->
             <div class="title">
                 <div class="suptitle">
-                    <a href="../index.html">北小齐珍藏</a>
+                    <a href="../../index.html">北小齐珍藏</a>
                     <span>/</span>
                     <a href="">用户管理</a>
                 </div>
                 &emsp;
                 <span>用户管理</span>
             </div>
+
+            <!-- 表格 -->
+            <div class="tablebox">
+                <!-- 搜索栏 -->
+                <div class="search">
+                    <div class="search_box">
+                        <label for="keyword">关键词搜索：</label>
+                        <input type="text" id="keyword" class="ipt" placeholder="请输入关键词" v-model="keyword"
+                            title="留空：查询全部；纯数字：根据编号查询；非纯数字：根据名称查询"></input>
+                        <button @click="search" class="btn">查询</button>
+                    </div>
+                    <!-- <div class="add_box">
+                        <button @click="showForm" class="btn">添加数据</button>
+                    </div> -->
+                </div>
+
+                <!-- 表格区 -->
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="tab_id">编号</th>
+                                <th class="tab_username">用户名</th>
+                                <th class="tab_phone">手机号</th>
+                                <th class="tab_email">邮箱</th>
+                                <th class="tab_permission">权限</th>
+                                <th class="tab_createdate">修改日期</th>
+                                <th class="tab_operation">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-if="dataList.length==0">
+                                <td colspan="7">暂无数据</td>
+                            </tr>
+                            <tr v-for="e in dataList">
+                                <!-- 编号 -->
+                                <td :title="e.id" class="tab_id">{{e.id}}</td>
+                                <!-- 用户名 -->
+                                <td :title="e.name" class="tab_username">{{e.username}}</td>
+                                <!-- 手机号 -->
+                                <td :title="e.phone" class="tab_phone" v-if="e.phone">{{e.phone}}</td>
+                                <td :title="e.phone" class="tab_phone" v-if="!e.phone" style="color: red;">未绑定</td>
+                                <!-- 邮箱 -->
+                                <td :title="e.email" class="tab_email" v-if="e.email">{{e.email}}</td>
+                                <td :title="e.email" class="tab_email" v-if="!e.email" style="color: red;">未绑定</td>
+                                <!-- 权限 -->
+                                <!-- 权限 -->
+                                <td :title="e.permission" v-if="e.permission==0" class="tab_permission">游客</td>
+                                <td :title="e.permission" v-else-if="e.permission==1" class="tab_permission">用户</td>
+                                <td :title="e.permission" v-else-if="e.permission==2" class="tab_permission">会员</td>
+                                <td :title="e.permission" v-else-if="e.permission==3" class="tab_permission">管理员</td>
+                                <td :title="e.permission" v-else-if="e.permission==4" class="tab_permission">超级管理员</td>
+                                <td :title="e.permission" v-else="e.permission>=5" class="tab_permission">开发者</td>
+                                <!-- 修改日期 -->
+                                <td :title="e.recorddate" class="tab_recorddate">{{e.recorddate}}</td>
+                                <!-- 操作 -->
+                                <td class="tab_operation">
+                                    <button class="btn" @click="edit(e.id)" v-if="e.id!==6">编辑</button>
+                                    <i class="gap"></i>
+                                    <button class="btn rbtn" @click="del(e.id)" v-if="e.id!==6">删除</button>
+                                    <!-- <h3 v-if="e.id==6">不支持修改</h3> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
     <script type="module">
         import { baseUrl } from "../../js/constant/url.js";
-        
-        const { createApp } = Vue;
+        import { popup } from "../../js/Utils/Utils.js";
+
         const token = localStorage.getItem("token");
+        const { createApp } = Vue;
+        let timeoutId; // 消息提示
         createApp({
             data() {
                 return {
-                    // 数据列表
+                    // 请求头
+                    headers: { "Authorization": token },
+                    // 显示数据列表
                     dataList: [],
+                    // 用户信息
+                    userinfo: {},
+                    // 关键词
+                    keyword: "",
+                    // 表单数据
+                    formData: {},
+
                 }
             },
             methods: {
+                // 获取用户信息
+                async getUserInfo() {
+                    let res = await axios.post(baseUrl + '/user/getUserByToken', {}, {
+                        headers: { 'Authorization': token }
+                    })
+                    if (res.data.data.id == 0) {
+                        localStorage.setItem("token", "");
+                    }
+                    this.userinfo = res.data.data
+                },
+
+
                 // 显示所有
-                async showAll() {
-                    let res = await axios.get(baseUrl + "/data/getDataByDimName");
-                    this.dataList = res.data.data;
-                }
+                async getDataList() {
+                    let res = [];
+                    // 显示全部
+                    res = await axios.get(baseUrl + "/user/getUserList", {
+                        headers: this.headers
+                    });
+                    if (res.data.data !== null) {
+                        this.dataList = res.data.data;
+                        return;
+                    }
+                },
+
+
+                // 搜索
+                async search() {
+                    this.dataList = []
+                    // 优先根据id查询
+                    let res = await axios.get(baseUrl + "/user/getUserById", {
+                        headers: this.headers,
+                        params: {
+                            id: parseInt(this.keyword)
+                        }
+                    });
+                    if (res.data.data != null && res.data.data != []) {
+                        this.dataList = [res.data.data];
+                        return;
+                    }
+
+                    // 根据name查询
+                    res = await axios.get(baseUrl + "/user/getUserByNameLike", {
+                        headers: this.headers,
+                        params: {
+                            username: this.keyword
+                        }
+                    });
+                    if (res.data.data != null && res.data.data != []) {
+                        this.dataList = res.data.data;
+                        return;
+                    }
+                },
+
+                // 修改数据
+                async addData() {
+                    let res = "";
+                    if (this.formData.username === "") {
+                        timeoutId = popup("请填写完整信息", 1, timeoutId);
+                        return;
+                    }
+                    // 修改
+                    if (this.formData.id !== -1) {
+                        res = await axios.put(baseUrl + "/user/updateUser", this.formData, {
+                            headers: this.headers,
+                        });
+                        if (res.data.code === 200) {
+                            timeoutId = popup("修改成功", 1, timeoutId);
+                            this.upDataList(true);
+                            this.hideForm();
+                        } else {
+                            alert(res.data.message);
+                            console.log(res.data);
+                        }
+                    } else {
+                        timeoutId = popup("编号不存在", 2, timeoutId);
+                        console.log("编号不存在");
+                    }
+                },
+
+
+                // 编辑数据
+                async edit(id) {
+                    let res = await axios.get(baseUrl + "/user/getUserById", {
+                        headers: this.headers,
+                        params: {
+                            id: id
+                        }
+                    });
+                    let data = res.data.data;
+                    this.formData = {
+                        id: data.id,
+                        username: data.username,
+                        phone: data.phone,
+                        permission: data.permission,
+                        recorddate: data.recorddate,
+                        email: data.email
+                    };
+                    let options = document.getElementById("datapermission").options;
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].value == data.permission) {
+                            options[i].selected = true;
+                        }
+                    }
+                    this.showForm();
+                },
+
+
+                // 删除数据
+                async del(id) {
+                    //确认框
+                    if (confirm("确定删除吗？")) {
+                        // 删除
+                        let res = await axios.delete(baseUrl + "/user/deleteUser", {
+                            headers: this.headers,
+                            params: {
+                                id: id
+                            }
+                        });
+                        if (res.data.code == 200) {
+                            timeoutId = popup("删除成功", 1, timeoutId);
+                            this.upDataList(true);
+                        } else {
+                            alert(res.data.message);
+                        }
+                    }
+                },
+
+
+                // 退出登录
+                async logout() {
+                    localStorage.setItem("token", "");
+                    window.location.href = '../../index.html';
+                },
+
+
+                // 显示表单
+                showForm() {
+                    document.getElementById("add_form").style.display = "block";
+                },
+
+
+                // 隐藏表单
+                hideForm() {
+                    this.resetForm();
+                    document.getElementById("add_form").style.display = "none";
+                },
+
+
+                // 恢复表单值
+                resetForm() {
+                    this.formData = {
+                        id: -1,
+                        username: "",
+                        phone: "",
+                        permission: 0,
+                        recorddate: "",
+                        email: ""
+                    };
+                    document.getElementById("datapermission").options[0].selected = true;
+                },
+
+
+                // 刷新数据列表
+                upDataList() {
+                    this.dataList = [];
+                    this.resetForm();
+                    this.getDataList();
+                },
+
+
+                // 判断权限
+                async checkPermission() {
+                    let res = await axios.post(baseUrl + "/user/getUserByToken", {}, {
+                        headers: this.headers
+                    });
+                    if (res.data.code === 200) {
+                        if (res.data.data.permission < 3) {
+                            window.location.href = '../../index.html';
+                        }
+                    } else {
+                        alert(res.data.message);
+                        window.location.href = '../../index.html';
+                    }
+                },
+
+
+
             },
-            // 挂载完毕执行
-            mounted() {
-                this.showAll(); // 显示所有
+            // 挂载完毕执行(初始化)
+            async mounted() {
+                await this.checkPermission(); // 判断权限
+                await this.getDataList(); // 获取所有数据
+                await this.getUserInfo(); // 获取用户信息
+                this.resetForm() // 重置表单值
             }
         }).mount("#app");
-    </script>
     </script>
 </body>
 

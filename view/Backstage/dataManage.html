@@ -140,19 +140,27 @@
                                 <td colspan="8">暂无数据</td>
                             </tr>
                             <tr v-for="e in dataList">
+                                <!-- 编号 -->
                                 <td :title="e.id" class="tab_id">{{e.id}}</td>
+                                <!-- 名称 -->
                                 <td :title="e.name" class="tab_name">{{e.name}}</td>
+                                <!-- 描述 -->
                                 <td :title="e.desc" class="tab_desc">{{e.desc}}</td>
+                                <!-- 网站 -->
                                 <td :title="e.src" class="tab_src"><a :href="e.src" target="_blank">{{e.src}}</a></td>
+                                <!-- 权限 -->
                                 <td :title="e.permission" v-if="e.permission==0" class="tab_permission">游客</td>
                                 <td :title="e.permission" v-else-if="e.permission==1" class="tab_permission">用户</td>
                                 <td :title="e.permission" v-else-if="e.permission==2" class="tab_permission">会员</td>
                                 <td :title="e.permission" v-else-if="e.permission==3" class="tab_permission">管理员</td>
                                 <td :title="e.permission" v-else-if="e.permission==4" class="tab_permission">超级管理员</td>
                                 <td :title="e.permission" v-else="e.permission>=5" class="tab_permission">开发者</td>
+                                <!-- 图标 -->
                                 <td :title="e.ico" class="tab_icon"><a :href="e.ico" target="_blank">
                                         <img :src="e.ico"></a></td>
+                                <!-- 分组 -->
                                 <td :title="e.group" class="tab_group">{{e.group}}</td>
+                                <!-- 操作 -->
                                 <td class="tab_operation">
                                     <button class="btn" @click="edit(e.id)">编辑</button>
                                     <i class="gap"></i>
@@ -203,10 +211,13 @@
                     let res = await axios.post(baseUrl + '/user/getUserByToken', {}, {
                         headers: { 'Authorization': token }
                     })
+                    if (res.data.data.id == 0) {
+                        localStorage.setItem("token", "");
+                    }
                     this.userinfo = res.data.data
                 },
 
-                
+
                 // 显示所有
                 async getDataList(group) {
                     let res = [];
