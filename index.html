@@ -35,11 +35,11 @@
 
             <!-- 分组 -->
             <div class="group_container">
-                <div class="group_item" @click="changeGroup()">
+                <div class="group_item" @click="refreshCache()">
                     <img src="https://s21.ax1x.com/2025/02/19/pEMx7kj.png" alt="" v-if="isMobile==false"><span>全部</span>
                 </div>
                 <div class="group_item" @click="changeGroup('collection')" v-if="userinfo.permission!==0">
-                    <img src="https://s21.ax1x.com/2025/02/22/pElM491.png" alt="">收藏夹
+                    <img src="https://s21.ax1x.com/2025/02/22/pElM491.png" alt=""><span>收藏夹</span> 
                 </div>
                 <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList">
                     <img :src="e.ico" alt="" v-if="isMobile==false"><span>{{e.name}}</span>
@@ -232,11 +232,18 @@
                     }
                 },
 
+                // 刷新缓存
+                refreshCache() {
+                    // 强制从服务器重新加载页面，忽略缓存
+                    location.reload(true);
+                },
+
                 // 退出登录
                 async logout() {
                     localStorage.setItem("token", "");
                     window.location.href = 'index.html';
                 },
+
             },
             async mounted() {
                 this.isMobileM(); // 判断是否移动端
