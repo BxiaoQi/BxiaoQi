@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 
 <head>
     <meta charset="UTF-8">
@@ -44,7 +44,7 @@
                 <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList" :id="'group'+e.id">
                     <img :src="e.ico" alt="" v-if="isMobile==false"><span>{{e.name}}</span>
                 </div>
-                <div class="group_item" @click="changeGroup('其他')" v-if="userinfo.permission!==0">
+                <div class="group_item" @click="changeGroup('其他')">
                     <img src="https://s21.ax1x.com/2025/02/19/pEMvfZ4.png" alt=""><span>其他</span>
                 </div>
             </div>
