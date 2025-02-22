@@ -64,7 +64,7 @@
                     <p class="card_desc" :title="e.desc">{{e.desc}}</p>
 
                     <div class="card_btns">
-                        <div class="collect_btn" v-if="!this.isFav&&e.permission!==0">
+                        <div class="collect_btn" v-if="!this.isFav&&this.userinfo.permission!==0">
                             <a @click="addToFav(e.id)">收藏</a>
                         </div>
                         <div class="view_btn">
