@@ -7,6 +7,11 @@ body {
     background-color: #f5f5f5;
 }
 
+/* 隐藏默认其他分组 */
+#group6{
+    display: none;
+}
+
 #app {
     width: 100%;
 }

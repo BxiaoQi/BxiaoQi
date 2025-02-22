@@ -39,10 +39,13 @@
                     <img src="https://s21.ax1x.com/2025/02/19/pEMx7kj.png" alt="" v-if="isMobile==false"><span>全部</span>
                 </div>
                 <div class="group_item" @click="changeGroup('collection')" v-if="userinfo.permission!==0">
-                    <img src="https://s21.ax1x.com/2025/02/22/pElM491.png" alt=""><span>收藏夹</span> 
+                    <img src="https://s21.ax1x.com/2025/02/22/pElM491.png" alt=""><span>收藏夹</span>
                 </div>
-                <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList">
+                <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList" :id="'group'+e.id">
                     <img :src="e.ico" alt="" v-if="isMobile==false"><span>{{e.name}}</span>
+                </div>
+                <div class="group_item" @click="changeGroup('其他')" v-if="userinfo.permission!==0">
+                    <img src="https://s21.ax1x.com/2025/02/19/pEMvfZ4.png" alt=""><span>其他</span>
                 </div>
             </div>
 
