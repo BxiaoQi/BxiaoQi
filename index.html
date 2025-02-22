@@ -31,34 +31,15 @@
 
         </div>
 
-        <div class="card_container" id="card_container" v-if="dataList.length==0">
-
-            <!-- 分组 -->
-            <div class="group_container">
-                <div class="group_item" @click="changeGroup()">
-                    <img src="https://s21.ax1x.com/2025/02/19/pEMx7kj.png" alt="">全部
-                </div>
-                <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList">
-                    <img :src="e.ico" alt=""> {{e.name}}
-                </div>
-            </div>
-
-            <!-- 卡片盒子 -->
-            <div class="card_box">
-                <div class="card  card-enter-active">
-                    <img src="./img/noData.png" alt="">
-                    <p class="card_name">暂无数据</p>
-                    <p class="card_desc">请选择分组</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card_container" id="card_container" v-if="dataList.length!=0">
+        <div class="card_container" id="card_container">
 
             <!-- 分组 -->
             <div class="group_container">
                 <div class="group_item" @click="changeGroup()">
                     <img src="https://s21.ax1x.com/2025/02/19/pEMx7kj.png" alt="" v-if="isMobile==false"><span>全部</span>
+                </div>
+                <div class="group_item" @click="changeGroup('collection')" v-if="userinfo.permission!==0">
+                    <img src="https://s21.ax1x.com/2025/02/22/pElM491.png" alt="">收藏夹
                 </div>
                 <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList">
                     <img :src="e.ico" alt="" v-if="isMobile==false"><span>{{e.name}}</span>
@@ -66,16 +47,26 @@
             </div>
 
             <!-- 卡片盒子 -->
-            <div class="card_box">
+            <div class="card_box" v-if="dataList.length==0">
+                <div class="card  card-enter-active">
+                    <img src="./img/noData.png" alt="">
+                    <p class="card_name">暂无数据</p>
+                    <p class="card_desc">请选择分组</p>
+                </div>
+            </div>
+
+            <!-- 卡片盒子 -->
+            <div class="card_box" v-if="dataList.length!=0">
                 <div class="card card-enter-active" v-for="e in dataList">
+                    <button class="card_del_btn" title="移除收藏" v-if="this.isFav" @click="removeFav(e.id)">X</button>
                     <img :src="e.ico" id="card_appicon " alt="">
-                    <p class="card_name">{{e.name}}</p>
-                    <p class="card_desc">{{e.desc}}</p>
+                    <p class="card_name" :title="e.name">{{e.name}}</p>
+                    <p class="card_desc" :title="e.desc">{{e.desc}}</p>
 
                     <div class="card_btns">
-                        <!-- <div class="collect_btn">
-                                <a href="" target="_blank">收藏</a>
-                            </div> -->
+                        <div class="collect_btn" v-if="!this.isFav">
+                            <a @click="addToFav(e.id)">收藏</a>
+                        </div>
                         <div class="view_btn">
                             <a :href="e.src" target="_blank">查看</a>
                         </div>
@@ -100,8 +91,10 @@
     </div>
     <script type="module">
         import { baseUrl } from "../../js/constant/url.js";
+        import { popup } from "../../js/Utils/Utils.js"
 
         const token = localStorage.getItem("token");
+        let timeoutId; // 放到全局
         const { createApp } = Vue;
         createApp({
             data() {
@@ -116,6 +109,9 @@
                     userinfo: { name: "da" },
                     // 是否是移动端
                     isMobile: false,
+                    // 是否在收藏夹
+                    isFav: false,
+
                 }
             },
             methods: {
@@ -133,19 +129,35 @@
                 async getDataList(group) {
                     let res = [];
                     if (group) {
-                        // 根据分组获取数据列表
-                        res = await axios.get(baseUrl + "/data/getDataByGroup", {
-                            headers: this.headers,
-                            params: {
-                                group: group
+                        if (group == "collection") {
+                            // 显示收藏夹
+                            res = await axios.get(baseUrl + "/Fav/getFavData", {
+                                headers: this.headers,
+                            });
+                            if (res.data.code == 200) {
+                                this.isFav = true;
+                            } else {
+                                timeoutId = popup(res.data.message, 2, timeoutId);
+                                setTimeout(() => {
+                                    window.location.href = ""
+                                }, 2000);
                             }
-                        });
+                        } else {
+                            // 根据分组获取数据列表
+                            res = await axios.get(baseUrl + "/data/getDataByGroup", {
+                                headers: this.headers,
+                                params: {
+                                    group: group
+                                }
+                            });
+                            this.isFav = false;
+                        }
                     } else {
                         // 显示全部
                         res = await axios.get(baseUrl + "/data/getDataByDimName", {
                             headers: this.headers,
                         });
-
+                        this.isFav = false;
                     }
                     if (res.data.data !== null) {
                         this.dataList = res.data.data;
@@ -160,7 +172,6 @@
                     this.groupList = res.data.data;
                 },
 
-
                 // 切换分组
                 changeGroup(group) {
                     if (group) {
@@ -168,6 +179,48 @@
                         return;
                     }
                     this.getDataList(); // 获取全部数据
+                },
+
+                // 添加到收藏夹
+                async addToFav(dataId) {
+                    let res = await axios.post(baseUrl + "/Fav/addToFav", {}, {
+                        headers: this.headers,
+                        params: {
+                            dataId: dataId
+                        }
+                    });
+
+                    if (res.data.code == 200) {
+                        timeoutId = popup("收藏成功", 1, timeoutId);
+                    } else {
+                        if (res.data.code == 403) {
+                            timeoutId = popup("已存在", 2, timeoutId);
+                        } else {
+                            timeoutId = popup("收藏失败，请联系管理员", 2, timeoutId);
+                        }
+                        // alert(JSON.stringify(res.data));
+                    }
+                },
+
+                // 移除收藏
+                async removeFav(dataId) {
+                    var result = confirm("确定继续吗?");
+                    if (result) {
+                        let res = await axios.delete(baseUrl + "/Fav/removeFavData", {
+                            headers: this.headers,
+                            params: {
+                                dataId: dataId
+                            }
+                        });
+
+                        if (res.data.code == 200) {
+                            timeoutId = popup("移除成功", 1, timeoutId);
+                            this.getDataList("collection");
+                        } else {
+                            alert(JSON.stringify(res.data));
+                            timeoutId = popup("移除失败，请联系管理员", 2, timeoutId);
+                        }
+                    }
                 },
 
                 // 判断是否是移动端
