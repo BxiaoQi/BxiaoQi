@@ -1,12 +1,8 @@
 import { baseUrl } from "../js/constant/url.js";
 import { REGEXP_USERNAME, REGEXP_PASSWORD } from "../js/constant/regexp.js";
-import { popup } from "../js/Utils/Utils.js";
-
 import { UtilClass } from "../../js/Utils/Utils.js";
 
 let Utils = new UtilClass()
-
-let timeoutId; // 放到全局
 // 页面加载完成
 window.onload = () => {
     document.getElementById("login_btn").addEventListener("click", login);
