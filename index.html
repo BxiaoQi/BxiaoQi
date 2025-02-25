@@ -96,11 +96,12 @@
         </div>
     </div>
     <script type="module">
-        import { baseUrl } from "../../js/constant/url.js";
-        import { popup } from "../../js/Utils/Utils.js"
+        import { baseUrl } from "./js/constant/url.js";
+        import { UtilClass } from "./js/Utils/Utils.js";
+
+        let Utils = new UtilClass();
 
         const token = localStorage.getItem("token");
-        let timeoutId; // 放到全局
         const { createApp } = Vue;
         createApp({
             data() {
@@ -143,7 +144,7 @@
                             if (res.data.code == 200) {
                                 this.isFav = true;
                             } else {
-                                timeoutId = popup(res.data.message, 2, timeoutId);
+                                Utils.popup(res.data.message, 2);
                                 setTimeout(() => {
                                     window.location.href = ""
                                 }, 2000);
@@ -197,12 +198,12 @@
                     });
 
                     if (res.data.code == 200) {
-                        timeoutId = popup("收藏成功", 1, timeoutId);
+                        Utils.popup("收藏成功", 1);
                     } else {
                         if (res.data.code == 403) {
-                            timeoutId = popup("已存在", 2, timeoutId);
+                            Utils.popup("已存在", 2);
                         } else {
-                            timeoutId = popup("收藏失败，请联系管理员", 2, timeoutId);
+                            Utils.popup("收藏失败，请联系管理员", 2);
                         }
                         // alert(JSON.stringify(res.data));
                     }
@@ -220,11 +221,11 @@
                         });
 
                         if (res.data.code == 200) {
-                            timeoutId = popup("移除成功", 1, timeoutId);
+                            Utils.popup("移除成功", 1);
                             this.getDataList("collection");
                         } else {
                             alert(JSON.stringify(res.data));
-                            timeoutId = popup("移除失败，请联系管理员", 2, timeoutId);
+                            Utils.popup("移除失败，请联系管理员", 2);
                         }
                     }
                 },

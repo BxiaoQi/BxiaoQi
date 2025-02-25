@@ -182,11 +182,12 @@
 
     <script type="module">
         import { baseUrl } from "../../js/constant/url.js";
-        import { popup } from "../../js/Utils/Utils.js";
+        import { UtilClass } from "../../js/Utils/Utils.js";
+
+        let Utils = new UtilClass()
 
         const token = localStorage.getItem("token");
         const { createApp } = Vue;
-        let timeoutId; // 消息提示
         createApp({
             data() {
                 return {
@@ -251,7 +252,6 @@
                 // 获取分组列表
                 async getGroupList() {
                     let res = await axios.get(baseUrl + "/group/getGroupList");
-                    console.log("data:" + res.data.data);
 
                     this.groupList = res.data.data;
                 },
@@ -302,7 +302,7 @@
                 async addData() {
                     let res = "";
                     if (this.formData.name === "" || this.formData.desc === "" || this.formData.src === "") {
-                        timeoutId = popup("请填写完整信息", 1, timeoutId);
+                        Utils.popup("请填写完整信息", 1);
                         return;
                     }
                     if (this.formData.ico === "") {
@@ -321,9 +321,9 @@
                     }
                     if (res.data.code === 200) {
                         if (this.formData.id === -1) {
-                            timeoutId = popup("添加成功", 1, timeoutId);
+                            Utils.popup("添加成功", 1);
                         } else {
-                            timeoutId = popup("修改成功", 1, timeoutId);
+                            Utils.popup("修改成功", 1);
                         }
                         this.upDataList(true);
                         this.hideForm();
@@ -383,7 +383,7 @@
                             }
                         });
                         if (res.data.code == 200) {
-                            timeoutId = popup("删除成功", 1, timeoutId);
+                            Utils.popup("删除成功", 1);
                             this.upDataList(true);
                         } else {
                             alert(res.data.message);

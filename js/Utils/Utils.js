@@ -1,438 +1,506 @@
 /// 目录
 /// 选中标题按 Ctrl + D 跳转对应函数
-//. 获取浏览器地址栏url?后面的参数
-//. rgb色值转16进制色值
-//. 16进制色值转rgb色值
+//. 获取地址栏参数
+//. 获取地址栏锚点
+//. rgb转16进制
+//. 16进制转rgb
 //. 数组去重
 //. 生成随机数
-//. 生成一个随机颜色值
+//. 生成随机色
 //. 数组排序
 //. 键盘监听事件
 //. 消息提示
-//. 序列化表单数据(原作者:周老师)
-//. 获取url锚点
-//. ajax请求
+//. 序列化表单
+//. Ajax请求
 //. 回显表单数据
 //. 日期格式化
 //. 计算过去时间
+//. 读取剪贴板
 //. 
-//. 
+
+export class UtilClass {
+    /// ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    // 消息提示相关参数
+    timeoutId = 0; // 定时器id
+    colors = [
+        "#147EC9", // 蓝色(消息)
+        "#11AD45", // 绿色(成功)
+        "#E60914" // 红色(失败)
+    ];
+    // 键盘监听相关参数
+    keyTimeoutId = 0;
+    /// ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
 
 
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
 
-// 函数作用:获取浏览器地址栏url?后面的参数
-export function getParam() {
-    let url = window.location.search;
-    let params = url.substring(1).split("&");
-    let Object = {};
-    // 遍历params数组并将其拆分成key和value然后存入result对象中，同时将key和value从url编码还原
-    for (let i = 0; i < params.length; i++) {
-        let keyValue = params[i].split("=");
-        // 将key和value从url编码还原后存入result对象中
-        Object[keyValue[0]] = decodeURIComponent(keyValue[1]);
-    }
-    return Object;
-}
-// 调用语法:   getParam()
-// 返回值   对象,如:
-// 假设url = https://www.baidu.com/s?ie=utf-8&wd=百度
-//          对象:{"ie": "utf-8","wd": "百度"}
 
-// 使用方法:
-//      console.log(getParam().wd); // 输出百度
-
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-// 函数作用:获取url锚点
-export function geturlAnchor() {
-    return window.location.hash.substring(1);
-}
-// 调用语法:    geturlAnchor()
-// 返回值:      无返回值
-//
-// 应用场景&使用方法:
-//      应用场景: 使用锚链接跳转页面传值(只可传一个值，通常传id使用)
-//      使用方法:
-//          http://localhost:80/index.html#id
-//          geturlAnchor()  id
-
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-// 函数作用:rgb色值转16进制色值
-export function rgbToHex(r, g, b) {
-    let arr = [];
-    if (typeof r == "string") {
-        arr = r.split("(")[1].split(")")[0].split(",");
-        r = arr[0], g = arr[1], b = arr[2];
-    }
-    let hex = ((r << 16) | (g << 8) | b).toString(16);
-    while (hex.length < 6) {
-        hex = "0" + hex;
-    }
-    return "#" + hex;
-}
-// 调用语法:   rgbToHex(Number: r, Number: g, Number: b) || rgbToHex(String: "rgb(r, g, b)")
-// 返回值   字符串,如:
-//          字符串: #00ff00
-
-// 使用方法一:
-//      console.log(rgbToHex(0,0,0));    // 输出  #000000
-// 使用方法二:
-//      console.log(rgbToHex("rgb(21,188,20)"));    // 输出  #15bc14
-
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-
-// 函数作用:16进制色值转rgb色值
-export function hexToRgb(hex, isArr) {
-    let r = parseInt(hex.slice(1, 3), 16);
-    let g = parseInt(hex.slice(3, 5), 16);
-    let b = parseInt(hex.slice(5, 7), 16);
-    if (isArr) {
-        return [r, g, b]
-    } else {
-        return ("rgb(" + r + ", " + g + ", " + b + ")");
-    }
-}
-// 调用语法:   hexToRgb(String: hex, Boolean: isArr)
-// 返回值   字符串 || 数组,如:
-//          字符串: rgb(38, 154, 255)
-//          数组: [38, 154, 255]
-
-// 使用方法一:
-//      console.log(hexToRgb("#aa12f1", false));    // 输出  rgb(170, 18, 241)
-// 使用方法二:
-//      console.log(hexToRgb("#aa12f1", true));    // 输出  [ 170, 18, 241 ]
-
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-
-// 函数作用:数组去重
-export function DelArrRep(arr) {
-    let newArr = [];
-    for (let i = 0; i < arr.length; i++) {
-        if (newArr.indexOf(arr[i]) == -1) {
-            newArr.push(arr[i]);
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 获取地址栏参数
+     * @description 获取浏览器地址栏url?后面的参数，并以对象形式返回，适合跨页面多个值传送
+     * @returns {Object} 参数对象
+     */
+    getParam() {
+        let url = window.location.search;
+        let params = url.substring(1).split("&");
+        let Object = {};
+        // 遍历params数组并将其拆分成key和value然后存入result对象中，同时将key和value从url编码还原
+        for (let i = 0; i < params.length; i++) {
+            let keyValue = params[i].split("=");
+            // 将key和value从url编码还原后存入result对象中
+            Object[keyValue[0]] = decodeURIComponent(keyValue[1]);
         }
+        return Object;
     }
-    return newArr;
-}
-// 调用语法:    DelArrRep(Array: arr)
-// 返回值:  数组,如:
-//      数组: [ '张三', '李四', 1, 5, 9, 2 ]
 
-// 使用方法:
-//      console.log(DelArrRep(["张三","李四","张三",1,5,9,5,2,1,9]));    // 输出  [ '张三', '李四', 1, 5, 9, 2 ]
-
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-
-// 函数作用:生成随机数
-export function RandomNum(min, max, length) {
-    if (max < min) {
-        let temp = max;
-        max = min;
-        min = temp;
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 获取地址栏锚点
+     * @description 获取地址栏url#后面的锚点，适合跨页面传送单个值
+     * @returns {string} 锚点值
+     */
+    geturlAnchor() {
+        return window.location.hash.substring(1);
     }
-    if (length == 1 || length == undefined) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    } else {
+
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name rgb转16进制
+     * @description 将rgb色值转16进制色值，如果传入16进制色值，则直接返回传入的值
+     * @param {string or Number } r rgb色值:"rgb(11,11,11)" 或 r值
+     * @param {Number} g rgb色值 g值
+     * @param {Number} b rgb色值 b值
+     * @returns {string} rgb色值 16进制hex
+     */
+    rgbToHex(r, g, b) {
+        if (r.indexOf("#") !== -1) {
+            return r;
+        }
         let arr = [];
-        for (let i = 0; i < length; i++) {
-            arr.push((Math.floor(Math.random() * (max - min + 1)) + min));
+        if (typeof r == "string") {
+            arr = r.split("(")[1].split(")")[0].split(",");
+            r = arr[0], g = arr[1], b = arr[2];
         }
-        return arr;
-    }
-}
-// 调用语法:    RandomNum(Number: min, Number: max, Number: length)
-// 返回值:  整数 || 数组
-//          整数: 58
-
-// 使用方法一:
-//      console.log(RandomNum(1, 100));    // 输出  58
-// 使用方法二:
-//      console.log(RandomNum(1, 100, 10));    // 输出  [50, 14, 64,  23, 70, 16, 20, 43, 100, 95]
-
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-
-// 函数作用: 生成一个随机颜色值
-export function RandomColor(isRgb) {
-    let r = Math.floor(Math.random() * 256);
-    let g = Math.floor(Math.random() * 256);
-    let b = Math.floor(Math.random() * 256);
-    if (isRgb) {
-        return "rgb(" + r + "," + g + "," + b + ")";
-    } else {
         let hex = ((r << 16) | (g << 8) | b).toString(16);
         while (hex.length < 6) {
             hex = "0" + hex;
         }
         return "#" + hex;
     }
-}
-// 调用语法:    RandomColor(Boolean: isRgb);
-// 返回值:  字符串,如何:
-//      字符串: rgb(12, 255, 196)
-//      字符串: #9cdcfe
-// 使用方法:
-//      console.log(RandomColor(true));    // 输出  rgb(40,123,184)
-//      console.log(RandomColor(false));    // 输出  #d86035
 
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-
-// 函数作用:数组排序
-export function ArrSort(arr, isMax_Min) {
-    if (isMax_Min) {
-        return arr.sort(function fun(a, b) { return b - a; });
-    } else {
-        return arr.sort(function fun(a, b) { return a - b; });
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 16进制转rgb
+     * @description 将16进制色值转rgb色值，如果传入rgb色值，则直接返回传入的值
+     * @param {string} hex 16进制色值
+     * @param {boolean} isArr 是否返回rgb色值数组
+     * @returns {string || Array<Number>} rgb色值 16进制hex 或 rgb色值数组
+     */
+    hexToRgb(hex, isArr) {
+        // 判断hex开头是否是rgb
+        if (hex.indexOf("rgb") != -1) {
+            return hex;
+        }
+        let r = parseInt(hex.slice(1, 3), 16);
+        let g = parseInt(hex.slice(3, 5), 16);
+        let b = parseInt(hex.slice(5, 7), 16);
+        if (isArr) {
+            return [r, g, b]
+        } else {
+            return ("rgb(" + r + ", " + g + ", " + b + ")");
+        }
     }
-}
-// 调用语法:    ArrSort(Array: arr, Boolean: isMax_Min)
-// 返回值:   数组,如:
-//      数组:[1,2,3,4,5,6,7]
-// 使用方法:
-//      console.log(ArrSort([5, 9, 3, 7, 5, 6, 1, 8], false));    // 输出  [ 1, 3, 5, 5, 6, 7, 8, 9 ]
-//      console.log(ArrSort([5, 9, 3, 7, 5, 6, 1, 8], true));    // 输出  [ 9, 8, 7, 6, 5, 5, 3, 1 ]
 
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-// 函数作用:键盘监听事件
-export function keyMonitor(e, dsq) {
-    let body = document.getElementsByTagName("body")[0];
-    let PromptBox = document.getElementById("PromptBox");
-    clearTimeout(dsq);
-    if (PromptBox != undefined || PromptBox != null) {
-        PromptBox.style = "display: inline-block;position: fixed;background-color: #55ff55;bottom: 50%;left: 50%;border-radius: 10px;padding: 10px;transform: translate(-50%);"
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 数组去重
+     * @description 将传递过来的数组重复项删除
+     * @param { Array<Number> } arr 数组
+     * @returns { Array<Number> } 去重后的数组
+     */
+    DelArrRep(arr) {
+        let newArr = [];
+        for (let i = 0; i < arr.length; i++) {
+            if (newArr.indexOf(arr[i]) == -1) {
+                newArr.push(arr[i]);
+            }
+        }
+        return newArr;
+    }
+
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 生成随机数
+     * @description 生成指定数量的随机数，当length为1时，生成一个随机数且返回值类型为 Number，否则生成指定数量的随机数返回值类型为 Array<Number>
+     * @param {Number} min 最小值
+     * @param {Number} max 最大值
+     * @param {Number} length 生成数量
+     * @returns {Number || Array<Number>} 生成的随机数数组
+     */
+    RandomNum(min, max, length) {
+        if (max < min) {
+            let temp = max;
+            max = min;
+            min = temp;
+        }
+        if (length == 1 || length == undefined) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        } else {
+            let arr = [];
+            for (let i = 0; i < length; i++) {
+                arr.push((Math.floor(Math.random() * (max - min + 1)) + min));
+            }
+            return arr;
+        }
+    }
+
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 生成随机色
+     * @description 随机生成一个颜色值，可以选择返回rgb色值或16进制色值
+     * @param {boolean} isRgb 是否返回rgb色值
+     * @returns {string} 随机颜色值
+     */
+    RandomColor(isRgb) {
+        let r = Math.floor(Math.random() * 256);
+        let g = Math.floor(Math.random() * 256);
+        let b = Math.floor(Math.random() * 256);
+        if (isRgb) {
+            return "rgb(" + r + "," + g + "," + b + ")";
+        } else {
+            let hex = ((r << 16) | (g << 8) | b).toString(16);
+            while (hex.length < 6) {
+                hex = "0" + hex;
+            }
+            return "#" + hex;
+        }
+    }
+
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 数组排序
+     * @description 将传递过来的数组进行排序，可以选择升序或降序
+     * @param {Array<Number>} arr 数组
+     * @param {boolean} isMax_Min 是否降序
+     * @returns 
+     */
+    ArrSort(arr, isMax_Min) {
+        if (isMax_Min) {
+            return arr.sort(function fun(a, b) { return b - a; });
+        } else {
+            return arr.sort(function fun(a, b) { return a - b; });
+        }
+    }
+
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 键盘监听事件
+     * @description 始终监听用户按下的键并以消息的样式反馈给用按下的 键名 和 键值
+     * @param {Object} e 键盘事件对象
+     */
+    keyMonitor(e) {
+        let PromptBox = document.getElementById('PromptBox');
+        clearTimeout(this.keyTimeoutId);
+        if (PromptBox == undefined) {// 创建一个新的 div 元素
+            var PromptBoxDiv = document.createElement('div');
+            // 设置 id 属性
+            PromptBoxDiv.id = 'PromptBox';
+            // 将新创建的 div 添加到 body 中
+            document.body.appendChild(PromptBoxDiv);
+            // 添加样式
+            PromptBox = document.getElementById('PromptBox');
+            PromptBox.style = ` display: inline-block;
+                                position: fixed;
+                                background-color: #55ff55;
+                                bottom: 15%;
+                                left: 50%;
+                                border-radius: 10px;
+                                padding: 10px;
+                                transform: translate(-50%);`;
+        }
+        PromptBox.style.display = "inline-block"; // 显示
         PromptBox.innerText = "您点击了>" + (e.key.charAt(0).toUpperCase() + e.key.slice(1)) + "<\n它的值为>" + e.keyCode + "<";
-    } else {
-        body.innerHTML = "<div id=\"PromptBox\"></div>" + body.innerHTML;
-        PromptBox.style = "display: inline-block;position: fixed;background-color: #55ff55;bottom: 50%;left: 50%;border-radius: 10px;padding: 10px;transform: translate(-50%);"
-        PromptBox.innerText = "您点击了>" + (e.key.charAt(0).toUpperCase() + e.key.slice(1)) + "<\n它的值为>" + e.keyCode + "<";
+        this.keyTimeoutId = setTimeout(() => {
+            PromptBox.style.display = "none"; // 隐藏
+        }, 2000);
     }
-    if (PromptBox.style.display != "none") {
-        dsq = setTimeout(function () {
-            PromptBox.style.display = "none";
-        }, 3000);
-        return dsq;
+
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 消息提示
+     * @description 在屏幕下方以气泡的形式显示指定信息
+     * @param {String} inf 消息文本
+     * @param {Number} num 0:信息,1:成功,2:失败
+     * @param {Number} times 显示时间
+     */
+    popup(inf, num, times = 3000) {
+        let popup = document.getElementById('popup');
+        if (popup == undefined) {// 创建一个新的 div 元素
+            var popupDiv = document.createElement('div');
+            // 设置 id 属性
+            popupDiv.id = 'popup';
+            // 将新创建的 div 添加到 body 中
+            document.body.appendChild(popupDiv);
+            // 添加样式
+            popup = document.getElementById('popup');
+            popup.style = "padding: 20px;position: fixed;bottom: 5%;left: 50%;transform: translate(-50%, -50%);border-radius: 15px;z-index: 9999;";
+        }
+        // 清除任何现有超时以防止隐藏先前的单击
+        clearTimeout(this.timeoutId);
+        popup.style.backgroundColor = this.colors[num];
+        popup.innerText = inf;
+        popup.style.display = 'block';
+
+        // 设置新的超时以隐藏3秒后的弹出窗口
+        this.timeoutId = setTimeout(function () {
+            popup.style.display = 'none';
+        }, times);
     }
-}
-// 调用语法:
-//      let globalVar;
-//      onkeydown = function (e) {globalVar = keyMonitor(Object: e,globalVar);}
-// 返回值:  定时器名
-//
-// 使用方法:
-//      直接运用下边两行即可使用
-//      let globalVar;
-//      onkeydown = function (e) {globalVar = keyMonitor(e,globalVar);}
 
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-// 函数作用: 消息提示
-export function popup(inf, num, timeoutId) {
-    let popup = document.getElementById('popup');
-    let colors = [
-        "#147EC9", // 蓝色(消息)
-        "#11AD45", // 绿色(成功)
-        "#E60914" // 红色(失败)
-    ];
-    if (popup == undefined) {// 创建一个新的 div 元素
-        var popupDiv = document.createElement('div');
-        // 设置 id 属性
-        popupDiv.id = 'popup';
-        // 将新创建的 div 添加到 body 中
-        document.body.appendChild(popupDiv);
-        // 添加样式
-        popup = document.getElementById('popup');
-        popup.style = "padding: 20px;position: fixed;bottom: 5%;left: 50%;transform: translate(-50%, -50%);border-radius: 15px;z-index: 9999;";
-    }
-    // 清除任何现有超时以防止隐藏先前的单击
-    clearTimeout(timeoutId);
-    popup.style.backgroundColor = colors[num];
-    popup.innerText = inf;
-    popup.style.display = 'block';
-
-    // 设置新的超时以隐藏3秒后的弹出窗口
-    timeoutId = setTimeout(function () {
-        popup.style.display = 'none';
-    }, 3000);
-    return timeoutId;
-}
-// 调用语法:    popup(String: inf, Number: num);
-// 返回值:      无返回值;
-//
-// 使用方法:
-//.     let timeoutId; // 放到全局
-//      timeoutId = popup(inf, num, timeoutId);
-
-//      参数 inf 代表提示信息, num 可选 1:成功; 0:消息; -1:警告, timeoutId 固定不变
-
-//.  ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-// 函数作用:序列化表单数据(原作者:周老师)
-export function serialize(form, isjson) {
-    let params = [];
-    if (isjson) {
-        params = {};
-    }
-    for (let i = 0; i < form.elements.length; i++) {
-        let field = form.elements[i];
-        //// 处理特殊类型
-        switch (field.type) {
-            case "file":
-            case "submit":
-            case "reset":
-            case "button":
-                break;
-            case "radio":
-                if (isjson && field.checked) {
-                    params[field.name] = field.value;
+    //.  ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 序列化表单
+     * @description 将表单内的数据序列化成对象或url字符串并进行url编码
+     * @param { Object } formObj 表单对象
+     * @param { boolean } isjson 是否返回json类型
+     * @returns { Object || String } 返回序列结果
+     */
+    serialize(formObj, isjson) {
+        let params = [];
+        if (isjson) {
+            params = {};
+        }
+        for (let i = 0; i < formObj.elements.length; i++) {
+            let field = formObj.elements[i];
+            /// 下拉框依旧可以处理
+            /// 处理特殊类型
+            switch (field.type) {
+                case "file":
+                case "submit":
+                case "reset":
+                case "button":
                     break;
-                }
-            case "checkbox":
-                /// 判断是否返回json
-                if (isjson) {
-                    /// 判断复选框是否选中
-                    if (field.checked) {
-                        /// 判断params对象里面是否存在field.name属性名这里注意[]用法
-                        if (params[field.name]) {
-                            params[field.name].push(field.value);/// 存在：想数组里添加内容
-                        } else {
-                            params[field.name] = [field.value];/// 不存在：创建数组
-                        }
-                    }
-                    break;
-                } else {
-                    if (!field.checked) {
+                case "radio":
+                    if (isjson && field.checked) {
+                        params[field.name] = field.value;
                         break;
                     }
-                }
-            default:
-                if (isjson) {
-                    params[field.name] = field.value;
-                } else {
-                    //不包含没有名字的表单字段
-                    if (field.name.length) {
-                        params.push(`${encodeURIComponent(field.name)}=${encodeURIComponent(field.value)}`);
+                case "checkbox":
+                    /// 判断是否返回json
+                    if (isjson) {
+                        /// 判断复选框是否选中
+                        if (field.checked) {
+                            /// 判断params对象里面是否存在field.name属性名这里注意[]用法
+                            if (params[field.name]) {
+                                params[field.name].push(field.value);/// 存在：想数组里添加内容
+                            } else {
+                                params[field.name] = [field.value];/// 不存在：创建数组
+                            }
+                        }
+                        break;
+                    } else {
+                        if (!field.checked) {
+                            break;
+                        }
                     }
-                }
-        }
-    }
-    if (isjson) {
-        return params;
-    } else {
-        return params.join("&");
-    }
-}
-// 调用语法:    serialize(Object: form, Boolean: isjson);
-// 返回值:  对象 || 字符串
-//          对象: {name:admin,password:123}
-//          字符串: name=admin&password=123
-//
-// 使用方法:
-//      假如表单里面输入用户名：张三，密码：123
-//.     表单每个字段必须有name属性值
-//      let formObj = document.querySelector("form");
-//      serialize(formObj,false)  "name=张三&password=123"
-//      serialize(formObj,true)  {user:"张三",password:"123"}
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-/**
- * 回显表单数据
- * @param {Object} form 表单对象
- * @param {Object} obj  对象
- * @returns {Object} form 表单对象
- * 
- */
-export function showForm(form, obj) {
-    let keys = Object.keys(obj);
-    for (let i = 0; i < form.elements.length; i++) {
-        let field = form.elements[i];
-        if (field.name == keys[keys.indexOf(field.name)]) {
-            if (field.type == "radio") {
-                field.checked = field.value == obj[field.name];
-            } else if (field.type == "checkbox") {
-                field.checked = obj[field.name].includes(field.value);
-            } else if (field.type == "file") {
-                continue;
-            } else {
-                field.value = obj[field.name];
+                default:
+                    if (isjson) {
+                        params[field.name] = field.value;
+                    } else {
+                        //不包含没有名字的表单字段
+                        if (field.name.length) {
+                            params.push(`${encodeURIComponent(field.name)}=${encodeURIComponent(field.value)}`);
+                        }
+                    }
             }
         }
+        if (isjson) {
+            return params;
+        } else {
+            return params.join("&");
+        }
     }
-}
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-/**
- * ajax请求封装
- * @param {Object} obj 请求对象
- * @returns {Object} 返回xhr对象
- */
-export function ajax(obj) {
-    let xhr = new XMLHttpRequest();
-    xhr.open(obj.type, obj.url, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                if (obj.success) {
-                    obj.success(xhr.responseText);
-                }
-            } else {
-                if (obj.error) {
-                    obj.error(xhr.status);
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 回显表单数据
+     * @description 将对象数据回显到表单内对象的key对应表单元素的name属性上
+     * @param {Object} formObj 表单对象
+     * @param {Object} obj  表单元素对象
+     * @returns {void} 
+     */
+    showForm(formObj, obj) {
+        let keys = Object.keys(obj);
+        for (let i = 0; i < formObj.elements.length; i++) {
+            let field = formObj.elements[i];
+            if (field.name == keys[keys.indexOf(field.name)]) {
+                if (field.type == "radio") {
+                    field.checked = field.value == obj[field.name];
+                } else if (field.type == "checkbox") {
+                    field.checked = obj[field.name].includes(field.value);
+                } else if (field.type == "file") {
+                    continue;
+                } else {
+                    field.value = obj[field.name];
                 }
             }
         }
     }
-    if (obj.type === 'POST' || obj.type === 'post') {
-        xhr.setRequestHeader('Content-Type', 'application/' + obj.dataType + ';charset=utf-8');
-        console.log(obj.data);
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * 封装基础的 AJAX 请求函数
+     * @name  Ajax请求
+     * @param {Object} options 配置参数
+     * 
+     *!@param {string} options.url 请求地址（必需）
+     * @param {string} [options.method=GET] 请求方法（GET/POST/PUT/DELETE等）
+     * @param {Object|string} [options.data] 请求数据（GET 时转为查询参数，POST 时作为请求体）
+     * @param {Object} [options.headers={}] 自定义请求头
+     * @param {number} [options.timeout=0] 超时时间（毫秒）
+     * @param {string} [options.responseType] 响应类型（json/text/blob等）
+     * @param {Function} [options.success] 成功回调函数（参数：响应数据）
+     * @param {Function} [options.error] 失败回调函数（参数：错误信息）
+     */
+    ajaxRequest(options) {
+        // 参数校验
+        if (!options.url) throw new Error('URL is required');
 
-        xhr.send(obj.data);
-    } else if (obj.type === 'GET' || obj.type === 'get') {
-        xhr.send();
-    }
-}
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-/**
- * 日期格式化
- * @description
- * @param {Date} date 日期对象
- * @param {String} fmt 格式化字符串
- * @returns {String} 格式化后的日期字符串
- */
-export function dateformat(date = new Date(), fmt = "yyyy-MM-dd hh:mm:ss.SSS") {
-    function repair(num) {
-        return (num < 10 ? ("0" + num) : num).toString();
-    }
-    let o = {
-        "yyyy": repair(date.getFullYear()),
-        "MM": repair(date.getMonth() + 1),
-        "dd": repair(date.getDate()),
-        "hh": repair(date.getHours()),
-        "mm": repair(date.getMinutes()),
-        "ss": repair(date.getSeconds()),
-        "SSS": date.getMilliseconds(),
-        "e": date.getDay()
-    }
-    fmt = fmt.replace(/yyyy|MM|dd|hh|mm|ss|SSS|e/g, function (v) {
-        return o[v];
-    });
+        // 默认值处理
+        const {
+            method = 'GET',
+            headers = {},
+            data = null,
+            timeout = 0,
+            responseType = 'json',
+            success = () => { },
+            error = () => { }
+        } = options;
 
-    return fmt;
-}
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
-/**
- * 计算过去时间
- * @param {Date} startTime 开始时间
- * @param {Date} endTime 结束时间
- * @returns {String} 返回过去时间
- */
-export function getElapsedTime(startTime, endTime = new Date()) {
-    if (endTime < startTime) {
-        return "时间错误";
+        const xhr = new XMLHttpRequest();
+        let url = options.url;
+
+        // 处理 GET 请求的查询参数
+        if (method.toUpperCase() === 'GET' && data) {
+            const params = typeof data === 'string' ? data : new URLSearchParams(data).toString();
+            url += (url.includes('?') ? '&' : '?') + params;
+        }
+
+        // 初始化请求
+        xhr.open(method, url, true);
+
+        // 设置响应类型
+        xhr.responseType = responseType;
+
+        // 设置超时
+        xhr.timeout = timeout;
+
+        // 设置请求头
+        Object.entries(headers).forEach(([key, value]) => {
+            xhr.setRequestHeader(key, value);
+        });
+
+        // 自动设置 Content-Type（如果未指定）
+        if (method.toUpperCase() !== 'GET' && data && !headers['Content-Type']) {
+            xhr.setRequestHeader('Content-Type', 'application/json');
+        }
+
+        // 处理请求体数据
+        let requestBody = null;
+        if (method.toUpperCase() !== 'GET' && data) {
+            requestBody = typeof data === 'string' ? data : JSON.stringify(data);
+        }
+
+        // 事件监听
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    const response = responseType === 'json' ? xhr.response : xhr.responseText;
+                    success(response);
+                } catch (e) {
+                    error(`数据解析错误: ${e.message}`);
+                }
+            } else {
+                error(`HTTP 错误: ${xhr.status} ${xhr.statusText}`);
+            }
+        };
+
+        xhr.onerror = () => error('网络错误');
+        xhr.ontimeout = () => error(`${timeout}ms后请求超时`);
+        xhr.onabort = () => error('请求已中止');
+
+        // 发送请求
+        try {
+            xhr.send(requestBody);
+        } catch (e) {
+            error(`请求错误: ${e.message}`);
+        }
     }
-    let end = new Date(new Date(endTime) - new Date(startTime));
-    let T = [end.getFullYear() - 1970, end.getMonth(), end.getDate() - 1, end.getHours() - 8, end.getMinutes(), end.getSeconds()];
-    let res = (T[0] == 0 ? "" : T[0] + "年")
-        + (T[1] == 0 ? "" : T[1] + "月")
-        + (T[2] == 0 ? "" : T[2] + "天")
-        + (T[3] == 0 ? "" : T[3] + "小时")
-        + (T[4] == 0 ? "" : T[4] + "分")
-        + (T[5] == 0 ? "" : T[5] + "秒");
-    ;
-    return res;
-};
-//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 日期格式化
+     * @description 将日期对象格式化成指定格式的字符串
+     * @param {Date} date 日期对象
+     * @param {String} fmt 格式化字符串
+     * @returns {String} 格式化后的日期字符串
+     */
+    dateformat(date = new Date(), fmt = "yyyy-MM-dd hh:mm:ss.SSS") {
+        function repair(num) {
+            return (num < 10 ? ("0" + num) : num).toString();
+        }
+        let o = {
+            "yyyy": repair(date.getFullYear()),
+            "MM": repair(date.getMonth() + 1),
+            "dd": repair(date.getDate()),
+            "hh": repair(date.getHours()),
+            "mm": repair(date.getMinutes()),
+            "ss": repair(date.getSeconds()),
+            "SSS": date.getMilliseconds(),
+            "e": date.getDay()
+        }
+        fmt = fmt.replace(/yyyy|MM|dd|hh|mm|ss|SSS|e/g, function (v) {
+            return o[v];
+        });
+
+        return fmt;
+    }
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 计算过去时间
+     * @description 计算过去时间
+     * @param {Date} startTime 开始时间
+     * @param {Date} endTime 结束时间
+     * @returns {String} 返回过去时间
+     */
+    getElapsedTime(startTime, endTime = new Date()) {
+        if (endTime < startTime) {
+            return "时间错误";
+        }
+        let end = new Date(new Date(endTime) - new Date(startTime));
+        let T = [end.getFullYear() - 1970, end.getMonth(), end.getDate() - 1, end.getHours() - 8, end.getMinutes(), end.getSeconds()];
+        let res = (T[0] == 0 ? "" : T[0] + "年")
+            + (T[1] == 0 ? "" : T[1] + "月")
+            + (T[2] == 0 ? "" : T[2] + "天")
+            + (T[3] == 0 ? "" : T[3] + "小时")
+            + (T[4] == 0 ? "" : T[4] + "分")
+            + (T[5] == 0 ? "" : T[5] + "秒");
+        ;
+        return res;
+    };
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 读取剪贴板
+     * @description 读取剪贴板内容并返回Promise对象
+     * @returns {Promise<string>}
+     */
+    async readClipboard() {
+        try {
+            const text = await navigator.clipboard.readText();
+            return text;
+        } catch (error) {
+            alert('读取剪贴板失败');
+            console.error(error);
+            return null;
+        }
+    }
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+
+}

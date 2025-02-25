@@ -164,11 +164,12 @@
 
     <script type="module">
         import { baseUrl } from "../../js/constant/url.js";
-        import { popup, dateformat } from "../../js/Utils/Utils.js";
+        import { UtilClass } from "../../js/Utils/Utils.js";
+
+        let Utils = new UtilClass()
 
         const token = localStorage.getItem("token");
         const { createApp } = Vue;
-        let timeoutId; // 消息提示
         createApp({
             data() {
                 return {
@@ -186,9 +187,6 @@
                 }
             },
             methods: {
-                show() {
-                    Utils.popup("暂不支持修改", 0, 1000)
-                },
                 // 获取用户信息
                 async getUserInfo() {
                     let res = await axios.post(baseUrl + '/user/getUserByToken', {}, {
@@ -247,7 +245,7 @@
                 async addData() {
                     let res = "";
                     if (this.formData.username === "") {
-                        timeoutId = popup("请填写完整信息", 1, timeoutId);
+                        Utils.popup("请填写完整信息", 1);
                         return;
                     }
                     // 修改
@@ -256,7 +254,7 @@
                             headers: this.headers,
                         });
                         if (res.data.code === 200) {
-                            timeoutId = popup("修改成功", 1, timeoutId);
+                            Utils.popup("修改成功", 1);
                             this.upDataList(true);
                             this.hideForm();
                         } else {
@@ -264,7 +262,7 @@
                             console.log(res.data);
                         }
                     } else {
-                        timeoutId = popup("编号不存在", 2, timeoutId);
+                        Utils.popup("编号不存在", 2);
                         console.log("编号不存在");
                     }
                 },
@@ -309,7 +307,7 @@
                             }
                         });
                         if (res.data.code == 200) {
-                            timeoutId = popup("删除成功", 1, timeoutId);
+                            Utils.popup("删除成功", 1);
                             this.upDataList(true);
                         } else {
                             alert(res.data.message);
@@ -400,7 +398,7 @@
                     // 将字符串转换为Date对象
                     const date = new Date(timeString);
 
-                    return dateformat(date, "yyyy/MM/dd hh:mm:ss");
+                    return Utils.dateformat(date, "yyyy/MM/dd hh:mm:ss");
                 },
 
                 // 计算剩余时间
@@ -414,7 +412,7 @@
                     let m = T[4] == 0 ? "" : T[4] + "分";
                     let s = T[5] == 0 ? "" : T[5] + "秒";
                     let res = Y + M + D + h + m + s;
-                    timeoutId = popup("已过: " + res, 0, timeoutId);
+                    Utils.popup("已过: " + res, 0);
                 },
 
 
