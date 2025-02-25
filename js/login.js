@@ -2,6 +2,10 @@ import { baseUrl } from "../js/constant/url.js";
 import { REGEXP_USERNAME, REGEXP_PASSWORD } from "../js/constant/regexp.js";
 import { popup } from "../js/Utils/Utils.js";
 
+import { UtilClass } from "../../js/Utils/Utils.js";
+
+let Utils = new UtilClass()
+
 let timeoutId; // 放到全局
 // 页面加载完成
 window.onload = () => {
@@ -22,7 +26,7 @@ async function login() {
     var password = document.getElementById("login_password").value;
     if (username == "" || password == "") {
         load.style.display = "none";
-        timeoutId = popup("信息填写不完整", 2, timeoutId);
+        Utils.popup("信息填写不完整", 2);
         return;
     }
 
@@ -35,7 +39,7 @@ async function login() {
         // 存储token
         localStorage.setItem("token", token);
         load.style.display = "none"; // 隐藏加载框
-        timeoutId = popup("登录成功", 1, timeoutId);
+        Utils.popup("登录成功", 1);
         // 跳转
         let resp = await axios.post(baseUrl + "/user/getUserByToken", {}, {
             headers: { "Authorization": token }
@@ -49,7 +53,7 @@ async function login() {
     } else {
         load.style.display = "none";
         console.log(res.data);
-        timeoutId = popup(res.data.message, 2, timeoutId);
+        Utils.popup(res.data.message, 2);
         return;
     }
 
@@ -60,11 +64,11 @@ async function register() {
     var password = document.getElementById("register_password").value;
     var password2 = document.getElementById("register_password_two").value;
     if (username == "" || password == "" || password2 == "") {
-        timeoutId = popup("信息填写不完整", 2, timeoutId);
+        Utils.popup("信息填写不完整", 2);
         return;
     }
     if (password != password2) {
-        timeoutId = popup("两次输入的密码不一致", 2, timeoutId);
+        Utils.popup("两次输入的密码不一致", 2);
         return;
     }
     if (!username.match(REGEXP_USERNAME)) {
@@ -82,12 +86,12 @@ async function register() {
         }
     });
     if (res.data.code == 200) {
-        timeoutId = popup("注册成功", 1, timeoutId);
+        Utils.popup("注册成功", 1);
         setTimeout(() => {
             window.location.href = "./login.html";
         }, 2000);
     } else {
-        timeoutId = popup(res.data.message, 2, timeoutId);
+        Utils.popup(res.data.message, 2);
         return;
     }
 }
