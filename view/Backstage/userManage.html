@@ -33,12 +33,12 @@
                 <label for="datapermission">权限：</label>
                 <select name="datapermission" id="datapermission" class="ipt"
                     @change="(e)=>{formData.permission=e.target.value}">
-                    <option value="0">游客</option>
-                    <option value="1">用户</option>
-                    <option value="2">会员</option>
-                    <option value="3">管理员</option>
-                    <option value="4">超级管理员</option>
-                    <option value="5">开发者</option>
+                    <option value="0" v-if="userinfo.permission>0">游客</option>
+                    <option value="1" v-if="userinfo.permission>1">用户</option>
+                    <option value="2" v-if="userinfo.permission>2">会员</option>
+                    <option value="3" v-if="userinfo.permission>3">管理员</option>
+                    <option value="4" v-if="userinfo.permission>4">超级管理员</option>
+                    <option value="5" v-if="userinfo.permission>5">开发者</option>
                 </select>
                 <br>
 
@@ -69,7 +69,8 @@
                 <div class="header_right">
                     <p>
                         <span id="username">{{userinfo.username}}</span>
-                        <span id="permission" title="不同权限可查看的数据量不同，目前暂未开发升级权限功能">({{getPermissionName(userinfo.permission)}})</span>
+                        <span id="permission"
+                            title="不同权限可查看的数据量不同，目前暂未开发升级权限功能">({{getPermissionName(userinfo.permission)}})</span>
                     </p>
                     <button onclick="window.location.href = '../../index.html'" v-if="userinfo.permission>=3"> 前 台
                     </button>
