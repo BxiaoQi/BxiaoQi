@@ -137,10 +137,6 @@ body {
 
 /* ==============================右侧顶部栏与标题栏 */
 
-#username {
-    margin-right: 40px;
-}
-
 .header {
     display: flex;
     width: 100%;
@@ -398,6 +394,14 @@ body {
 #datadesc {
     padding: 5px;
     outline: none;
+}
+
+#username{
+    font-size: 16px;
+}
+
+#permission{
+    font-size: 12px;
 }
 
 

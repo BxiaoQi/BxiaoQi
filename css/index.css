@@ -271,3 +271,11 @@ body {
     gap: 20px;
     align-items: center;
 }
+
+#username{
+    font-size: 16px;
+}
+
+#permission{
+    font-size: 12px;
+}

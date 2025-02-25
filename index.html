@@ -18,7 +18,10 @@
                     <img src="./logo.png" alt="">
                 </div>
                 <div class="header_right">
-                    <p>当前用户：<span id="username">{{userinfo.username}}</span></p>
+                    <p>
+                        <span id="username">{{userinfo.username}}</span>
+                        <span id="permission" title="不同权限可查看的数据量不同，目前暂未开发升级权限功能">({{getPermissionName(userinfo.permission)}})</span>
+                    </p>
                     <button onclick="window.location.href = './view/Backstage/dataManage.html'"
                         v-if="userinfo.permission>=3"> 后 台 </button>
                     <button onclick="window.location.href = './view/login/login.html'" v-if="userinfo.permission==0"> 登
@@ -224,6 +227,25 @@
                             timeoutId = popup("移除失败，请联系管理员", 2, timeoutId);
                         }
                     }
+                },
+
+                // 获取权限名称
+                getPermissionName(permission) {
+                    switch (permission) {
+                        case 0:
+                            return "游客"
+                        case 1:
+                            return "用户";
+                        case 2:
+                            return "会员";
+                        case 3:
+                            return "管理员";
+                        case 4:
+                            return "超级管理员";
+                        case 5:
+                            return "开发者";
+                    }
+                    return permission > 5 ? "开发者" : "未知";
                 },
 
                 // 判断是否是移动端

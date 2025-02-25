@@ -1,7 +1,6 @@
 /// 目录
 /// 选中标题按 Ctrl + D 跳转对应函数
 //. 获取浏览器地址栏url?后面的参数
-//. 获取url锚点
 //. rgb色值转16进制色值
 //. 16进制色值转rgb色值
 //. 数组去重
@@ -11,10 +10,11 @@
 //. 键盘监听事件
 //. 消息提示
 //. 序列化表单数据(原作者:周老师)
-//. 回显表单数据
+//. 获取url锚点
 //. ajax请求
+//. 回显表单数据
 //. 日期格式化
-//. 
+//. 计算过去时间
 //. 
 //. 
 
@@ -394,6 +394,9 @@ export function ajax(obj) {
  * @returns {String} 格式化后的日期字符串
  */
 export function dateformat(date = new Date(), fmt = "yyyy-MM-dd hh:mm:ss.SSS") {
+    function repair(num) {
+        return (num < 10 ? ("0" + num) : num).toString();
+    }
     let o = {
         "yyyy": repair(date.getFullYear()),
         "MM": repair(date.getMonth() + 1),
@@ -412,9 +415,24 @@ export function dateformat(date = new Date(), fmt = "yyyy-MM-dd hh:mm:ss.SSS") {
 }
 //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
 /**
- * 日期补0操作
+ * 计算过去时间
+ * @param {Date} startTime 开始时间
+ * @param {Date} endTime 结束时间
+ * @returns {String} 返回过去时间
  */
-export function repair(num){
-    return (num < 10 ? ("0" + num) : num).toString();
-}
-
+export function getElapsedTime(startTime, endTime = new Date()) {
+    if (endTime < startTime) {
+        return "时间错误";
+    }
+    let end = new Date(new Date(endTime) - new Date(startTime));
+    let T = [end.getFullYear() - 1970, end.getMonth(), end.getDate() - 1, end.getHours() - 8, end.getMinutes(), end.getSeconds()];
+    let res = (T[0] == 0 ? "" : T[0] + "年")
+        + (T[1] == 0 ? "" : T[1] + "月")
+        + (T[2] == 0 ? "" : T[2] + "天")
+        + (T[3] == 0 ? "" : T[3] + "小时")
+        + (T[4] == 0 ? "" : T[4] + "分")
+        + (T[5] == 0 ? "" : T[5] + "秒");
+    ;
+    return res;
+};
+//. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
