@@ -47,8 +47,10 @@
                 <br>
                 <label for="dataico">图标：</label>
                 <input type="text" id="dataico" class="ipt" placeholder="请输入图标" v-model="formData.ico"></input>
+                <!-- 删除图标 -->
                 <img src="../../imgs/icon/icon_delete.png" alt="" id="dataico_delete" class="from_icon"
-                    @click="()=>{formData.ico=''}">
+                    @click="readClipboard()">
+
                 <div class="img_from_box">
                     <img :src="formData.ico" alt="">
                 </div>
@@ -79,7 +81,8 @@
                 <div class="header_right">
                     <p>
                         <span id="username">{{userinfo.username}}</span>
-                        <span id="permission" title="不同权限可查看的数据量不同，目前暂未开发升级权限功能">({{getPermissionName(userinfo.permission)}})</span>
+                        <span id="permission"
+                            title="不同权限可查看的数据量不同，目前暂未开发升级权限功能">({{getPermissionName(userinfo.permission)}})</span>
                     </p>
                     <button onclick="window.location.href = '../../index.html'" v-if="userinfo.permission>=3"> 前 台
                     </button>
@@ -406,6 +409,18 @@
                 async logout() {
                     localStorage.setItem("token", "");
                     window.location.href = '../../index.html';
+                },
+
+                // 读取剪贴板
+                async readClipboard() {
+                    try {
+                        const text = await navigator.clipboard.readText();
+                        this.formData.ico = text;
+                    } catch (error) {
+                        alert('读取剪贴板失败');
+                        console.error(error);
+                        return null;
+                    }
                 },
 
 
