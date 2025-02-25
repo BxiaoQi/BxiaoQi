@@ -38,17 +38,17 @@
 
             <!-- 分组 -->
             <div class="group_container">
-                <div class="group_item" @click="refreshCache()">
-                    <img src="https://s21.ax1x.com/2025/02/19/pEMx7kj.png" alt="" v-if="isMobile==false"><span>全部</span>
+                <div class="group_item" @click="refreshCache()"  title="全部">
+                    <img src="https://s21.ax1x.com/2025/02/19/pEMx7kj.png" alt="" v-if="isMobile==false">
                 </div>
-                <div class="group_item" @click="changeGroup('collection')" v-if="userinfo.permission!==0">
-                    <img src="https://s21.ax1x.com/2025/02/22/pElM491.png" alt=""><span>收藏夹</span>
+                <div class="group_item" @click="changeGroup('collection')" v-if="userinfo.permission!==0"  title="收藏夹">
+                    <img src="https://s21.ax1x.com/2025/02/22/pElM491.png" alt="">
                 </div>
-                <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList" :id="'group'+e.id">
-                    <img :src="e.ico" alt="" v-if="isMobile==false"><span>{{e.name}}</span>
+                <div class="group_item" @click="changeGroup(e.name)" v-for="e in groupList" :id="'group'+e.id"  :title="e.name">
+                    <img :src="e.ico" alt="" v-if="isMobile==false">
                 </div>
-                <div class="group_item" @click="changeGroup('其他')">
-                    <img src="https://s21.ax1x.com/2025/02/19/pEMvfZ4.png" alt=""><span>其他</span>
+                <div class="group_item" @click="changeGroup('其他')"  title="其他">
+                    <img src="https://s21.ax1x.com/2025/02/19/pEMvfZ4.png" alt="">
                 </div>
             </div>
 

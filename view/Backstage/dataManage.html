@@ -66,7 +66,7 @@
             <ul>
                 <li class="active"><a href="">数据管理</a></li>
                 <li><a href="./groupManage.html">分组管理</a></li>
-                <li><a href="./userManage.html">用户管理</a></li>
+                <li v-if="userinfo.permission>3"><a href="./userManage.html">用户管理</a></li>
             </ul>
         </div>
 

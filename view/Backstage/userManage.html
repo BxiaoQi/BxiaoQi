@@ -385,7 +385,7 @@
                         headers: this.headers
                     });
                     if (res.data.code === 200) {
-                        if (res.data.data.permission < 3) {
+                        if (res.data.data.permission < 4) {
                             window.location.href = '../../index.html';
                         }
                     } else {
