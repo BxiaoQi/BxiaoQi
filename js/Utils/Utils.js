@@ -4,6 +4,7 @@
 //. 获取地址栏锚点
 //. rgb转16进制
 //. 16进制转rgb
+//. 色值格式互转
 //. 数组去重
 //. 生成随机数
 //. 生成随机色
@@ -109,6 +110,48 @@ export class UtilClass {
         } else {
             return ("rgb(" + r + ", " + g + ", " + b + ")");
         }
+    }
+
+    //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 
+    /**
+     * @name 色值格式互转
+     * @description 如果转来的值是hex格式返回rgb格式，如果转来的值是rgb格式返回hex格式
+     * @param {String} colorParam 色值
+     * @returns {string} 转换后的色值
+     */
+    colorFormat(colorParam) {
+        let result = "";
+        if (colorParam.indexOf("#") != -1) {
+            let i = colorParam.indexOf("#")
+            colorParam = colorParam.slice(i, colorParam.length);
+            let s = 0;
+            colorParam.length < 8 ? s = 0 : s = 2;
+            let r = parseInt(colorParam.slice(s + 1, s + 3), 16);
+            let g = parseInt(colorParam.slice(s + 3, s + 5), 16);
+            let b = parseInt(colorParam.slice(s + 5, s + 7), 16);
+            if (colorParam.length <= 8) {
+                // 不带有透明度
+                result = ("rgb(" + r + ", " + g + ", " + b + ")");
+            } else {
+                // 带有透明度
+                let a = (parseInt(colorParam.slice(1, 3), 16) / 255).toFixed(2);
+                result = ("rgba(" + r + ", " + g + ", " + b + ", " + a + ")");
+            }
+        } else {
+            let arr = colorParam.split("(")[1].split(")")[0].split(",");
+            let r = arr[0];
+            let g = arr[1];
+            let b = arr[2];
+            if (colorParam.indexOf("rgba") != -1) {
+                // 带有透明度
+                let a = arr[3];
+                result = ("#" + Math.round(parseInt(a) * 255).toString(16) + parseInt(r).toString(16) + parseInt(g).toString(16) + parseInt(b).toString(16));
+            } else {
+                // 不带有透明度
+                result = ("#" + parseInt(r).toString(16) + parseInt(g).toString(16) + parseInt(b).toString(16));
+            }
+        }
+        return result;
     }
 
     //. ========================== 分割线 ========================== 分割线 ========================== 分割线 ========================== 

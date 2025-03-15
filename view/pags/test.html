@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="color" name="" id="inp">
+    <input type="text" name="" id="inp1">
+    <button id="btn">转换</button>
+    <p id="text"></p>
+
+    <script type="module">
+        import { UtilClass } from "../../js/Utils/Utils.js"
+        let Utils = new UtilClass();
+        let p = document.getElementById("text");
+        let inp = document.getElementById("inp");
+        let inp1 = document.getElementById("inp1");
+        p.innerText = inp.value
+
+        document.getElementById("inp").onchange = function () {
+            p.innerText = inp.value
+        }
+
+        document.getElementById("btn").onclick = function () {
+            let color = Utils.colorFormat(inp1.value)
+            p.innerText = color
+        }
+    </script>
+</body>
+
+</html>

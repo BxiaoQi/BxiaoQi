@@ -1,0 +1,37 @@
+document.getElementById('urlForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const select = document.getElementById('apiSelect');
+    const input = document.getElementById('inputUrl');
+
+    if (!input.value.trim()) {
+        showToast('你还没填链接呢宝🤷‍♂️', '#ff4d4f');
+        return;
+    }
+    
+    if (!select.value) {
+        showToast('宝宝你还没选接口嘞🤷‍♂️', '#ff4d4f');
+        return;
+    }
+
+    const apiUrl = select.value + encodeURIComponent(input.value);
+    window.location.href = apiUrl;
+});
+
+document.getElementById('inputUrl').addEventListener('blur', function () {
+    const url = this.value;
+    this.setValidity(url.startsWith('http://') || url.startsWith('https://'));
+    document.getElementById('urlHelp').style.display = this.checkValidity() ? 'none' : 'block';
+});
+
+function showToast(text, color = '#4CAF50') {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.style.backgroundColor = color;
+    toast.textContent = text;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
