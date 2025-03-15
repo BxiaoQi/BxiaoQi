@@ -1,3 +1,5 @@
+
+
 document.getElementById('urlForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -8,7 +10,7 @@ document.getElementById('urlForm').addEventListener('submit', function (e) {
         showToast('你还没填链接呢宝🤷‍♂️', '#ff4d4f');
         return;
     }
-    
+
     if (!select.value) {
         showToast('宝宝你还没选接口嘞🤷‍♂️', '#ff4d4f');
         return;
@@ -24,6 +26,22 @@ document.getElementById('inputUrl').addEventListener('blur', function () {
     document.getElementById('urlHelp').style.display = this.checkValidity() ? 'none' : 'block';
 });
 
+
+document.getElementById('Officialbtn').addEventListener('click', function () {
+    isShow()
+});
+
+function isShow() {
+    let Official_card_box = document.getElementById('Official-card-box');
+    if (Official_card_box.style.display === 'none') {
+        Official_card_box.style.display = 'flex';
+    } else {
+        Official_card_box.style.display = 'none';
+    }
+}
+
+
+// 显示提示框
 function showToast(text, color = '#4CAF50') {
     const toast = document.createElement('div');
     toast.className = 'toast';

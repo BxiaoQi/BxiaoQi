@@ -6,7 +6,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #6B8DD6 0%, #8E37D7 100%);
+    background: #FFFFCC;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -15,13 +15,13 @@ body {
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.95);
+    display: flex;
     width: 100%;
+    background: rgba(255, 255, 255, 0.95);
     max-width: 400px;
     padding: 30px 25px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    display: flex;
     flex-direction: column;
 }
 
@@ -47,7 +47,7 @@ input:focus {
     box-shadow: 0 0 8px rgba(107, 141, 214, 0.3);
 }
 
-button {
+.submitbtn {
     background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
     color: white;
     padding: 16px;
@@ -63,14 +63,14 @@ option{
     text-align: center;
 }
 
-button:active {
+.submitbtn:active {
     transform: scale(0.98);
 }
 
 .toast {
     text-wrap: nowrap;
     position: fixed;
-    bottom: 20px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     background: #4CAF50;
@@ -90,4 +90,68 @@ button:active {
         transform: translateX(-50%) translateY(0);
         opacity: 1;
     }
+}
+
+.Officialbtn{
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    width: 7vh;
+    height: 5vh;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 20%;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+}
+
+.Official-card-box{
+    display: none;
+    position: fixed;
+    padding: 20px;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.Official-card{
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    background: #CCFFFF;
+    padding: 30px 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+
+.Official-card>a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 45%;
+    text-decoration: none;
+    background: #FFCCCC;
+    color: black;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.Official-card>a>img{
+    width: 20%;
+    vertical-align: middle;
+}
+.Official-card>a>span{
+    width: 80%;
 }
