@@ -6,7 +6,7 @@
 }
 
 body {
-    background: #FFFFCC;
+    /* background: #FFFFCC; */
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -16,13 +16,15 @@ body {
 
 .card {
     display: flex;
+    position: relative;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255);
     max-width: 400px;
     padding: 30px 25px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     flex-direction: column;
+    opacity: 0.9;
 }
 
 .form-group {
@@ -59,7 +61,7 @@ input:focus {
     width: 100%;
 }
 
-option{
+option {
     text-align: center;
 }
 
@@ -92,10 +94,10 @@ option{
     }
 }
 
-.Officialbtn{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+.Officialbtn {
+    position: absolute;
+    bottom: -7vh;
+    right: 26px;
     width: 7vh;
     height: 5vh;
     border: none;
@@ -106,7 +108,7 @@ option{
     background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
 }
 
-.Official-card-box{
+.Official-card-box {
     width: 100%;
     position: fixed;
     padding: 20px;
@@ -117,7 +119,7 @@ option{
     background: rgba(0, 0, 0, 0.5);
 }
 
-.Official-card{
+.Official-card {
     display: flex;
     width: 100%;
     max-width: 400px;
@@ -131,7 +133,7 @@ option{
 }
 
 
-.Official-card>a{
+.Official-card>a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -148,10 +150,11 @@ option{
     transition: transform 0.1s ease;
 }
 
-.Official-card>a>img{
+.Official-card>a>img {
     width: 20%;
     vertical-align: middle;
 }
-.Official-card>a>span{
+
+.Official-card>a>span {
     width: 80%;
 }
