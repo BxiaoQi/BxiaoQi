@@ -16,7 +16,11 @@ document.getElementById('urlForm').addEventListener('submit', function (e) {
         return;
     }
 
-    const apiUrl = select.value + encodeURIComponent(input.value);
+
+    const apiUrl = select.value + encodeURIComponent(input.value) + "&vod_referrer=1";
+    // 在新标签打开
+    // window.open(apiUrl, '_blank');
+    // 在当前标签打开
     window.location.href = apiUrl;
 });
 
