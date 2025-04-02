@@ -1,0 +1,386 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'PingFang SC', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    /* background: #FFFFCC; */
+    background: url("../imgs/pg.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.card {
+    display: flex;
+    position: relative;
+    width: 100%;
+    background: rgba(255, 255, 255);
+    max-width: 400px;
+    padding: 30px 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    opacity: 0.9;
+}
+
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.clearUrl {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    display: block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    background: transparent;
+}
+
+.clearUrl:hover {
+    opacity: 1;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+select:focus,
+input:focus {
+    outline: none;
+    border-color: #6B8DD6;
+    box-shadow: 0 0 8px rgba(107, 141, 214, 0.3);
+}
+
+input[type="text"] {
+    padding-right: 40px !important;
+}
+
+/* 解析按钮 */
+.submitbtn {
+    background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+    color: white;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* 解析并收藏按钮 */
+.collect-parse-btn {
+    background: linear-gradient(135deg, #FFB6C1 0%, #FFC0CB 100%);
+    margin-bottom: 10px;
+}
+
+.collect-parse-btn:hover {
+    background: linear-gradient(135deg, #FFC0CB 0%, #FFB6C1 100%);
+}
+
+.collect-parse-btn:active {
+    transform: scale(0.98);
+}
+
+.history-card-box,
+.collect-card-box {
+    width: 100%;
+    position: fixed;
+    padding: 20px;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* 历史记录按钮和收藏夹按钮 */
+.history-btn-box {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+/* 历史记录按钮 */
+.historybtn {
+    background: linear-gradient(135deg, #6B8DD6 0%, #8E37D7 100%);
+    color: white;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    width: 100%;
+}
+
+/* 历史记录按钮点击 */
+.historybtn:active {
+    transform: scale(0.98);
+}
+
+/* 历史记录卡片 */
+.history-card,
+.collect-card,
+.Official-card {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    flex-direction: column;
+    background: #fff;
+    padding: 30px 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.history-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.clear-history-btn {
+    background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clear-history-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.clear-history-btn:active {
+    transform: translateY(0);
+}
+
+/* 历史记录卡片内容 */
+.history-item,
+.collect-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* 历史记录和收藏夹项目操作按钮 */
+.history-item-actions,
+.collect-item-actions {
+    position: absolute;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 1;
+    background: #f5f5f5;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.history-item-collect,
+.history-item-edit,
+.history-item-delete,
+.collect-item-edit,
+.collect-item-delete {
+    border: 1px solid #666;
+    border-radius: 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    white-space: nowrap;
+    background: #fff;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* 历史记录卡片内容 */
+.history-item-content,
+.collect-item-content {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-right: 160px; /* 增加右侧空间 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 历史记录卡片收藏hover */
+.history-item-collect:hover {
+    background: #666;
+    color: #fff !important;
+}
+
+/* 历史记录卡片hover */
+.history-item:hover,
+.collect-item:hover {
+    background: #e0e0e0;
+}
+
+.history-item:hover .history-item-actions,
+.collect-item:hover .collect-item-actions {
+    background: #e0e0e0;
+}
+
+.history-item:last-child,
+.collect-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 收藏夹按钮 */
+.collectbtn {
+    background: linear-gradient(135deg, #dbbb03 0%, #fff06d 100%);
+    color: white;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    width: 100%;
+}
+
+/* 选择框 */
+option {
+    text-align: center;
+}
+
+/* 解析按钮点击 */
+.submitbtn:active {
+    transform: scale(0.98);
+}
+
+/* 提示框 */
+.toast {
+    text-wrap: nowrap;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 25px;
+    animation: slideUp 0.5s ease-out;
+}
+
+/* 提示框动画 */
+@keyframes slideUp {
+    from {
+        transform: translateX(-50%) translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 官方网站按钮 */
+.Officialbtn {
+    position: absolute;
+    bottom: -7vh;
+    right: 26px;
+    border: none;
+    font-size: 16px;
+    padding: 16px 20px;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+}
+
+/* 官方网站卡片 */
+.Official-card-box {
+    width: 100%;
+    position: fixed;
+    padding: 20px;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.OfficialList {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-evenly;
+    border-radius: 20px;
+}
+
+.OfficialList>a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 40%;
+    text-decoration: none;
+    background: #FFCCCC;
+    color: black;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.OfficialList>a>img {
+    width: 20%;
+    vertical-align: middle;
+}
+
+.OfficialList>a>span {
+    width: 80%;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/Utils/vue.global.js"></script>
+    <link rel="stylesheet" href="./css/indexPC.css">
+    <title>北小齐珍藏</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="user.username">
+
+        <div class="header_box">
+            <div class="header">
+                <div class="header_left">
+                    <img src="./logo.png" alt="">
+                </div>
+                <div class="header_right">
+                    <p>
+                        <span id="show_username"> {{user.username}}</span> &ensp;
+                        <span id="show_permission" title="不同权限可查看的数据量不同，目前暂未开发升级权限功能">( {{user.permission}} )</span>
+                    </p>
+                    <button onclick="window.location.href = './view/Backstage/dataManage.html'" v-if="4>=3"> 后 台
+                    </button>
+                    <button onclick="window.location.href = './view/login/login.html'" v-if="0==0"> 登
+                        录
+                    </button>
+                    <button @click="logout()" v-if="2!==0"> 退 出 </button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <script type="module">
+        import { UtilClass } from './js/Utils/utils.js';
+        let Utils = new UtilClass();
+
+        const { createApp, ref } = Vue;
+        createApp({
+            setup() {
+                let user = ref({
+                    username: "admin",
+                    permission: "管理员"
+                });
+                return {
+                    user
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>

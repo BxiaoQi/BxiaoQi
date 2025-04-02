@@ -4,21 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./wenbao/css/style.css">
     <title>😘 文文专属 🥰</title>
-    <style>
-        body {
-            background: url("./imgs/pg.jpg");
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-    </style>
 </head>
 
 <body>
     <div class="card">
-        <h2 style="color: #333; text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #FF69B4; text-align: center; margin-bottom: 30px;">
             😘 文文专属 🥰
         </h2>
 
@@ -65,48 +57,73 @@
             </div>
 
             <div class="form-group">
-                <label for="inputUrl" style="display: block; margin-bottom: 10px; color: #666;">
-                    宝宝把视频链接粘贴到这下边：
-                </label>
-                <input type="text" id="inputUrl" placeholder="粘贴到这就行哈👌" aria-describedby="urlHelp">
-                <div id="urlHelp" class="form-text text-muted" style="display: none;">
-                    宝宝，你输入的不对，应该是http或https开头嘞
-                </div>
+                <input type="text" id="inputUrl" placeholder="宝宝把视频链接粘贴到这：" aria-describedby="urlHelp" style="padding-right: 32px;">
+                <span id="clearUrl" class="clearUrl" style="display: none; color: #FF69B4; font-size: 16px;">❌</span>
             </div>
 
-            <button class="submitbtn" type="submit" style="background: #FF6B6B;">剩下的交给我吧宝😎</button>
+            <button class="submitbtn" type="submit" style="background: #FF6B6B;">点这开始看电视哈宝</button>
+            <button id="collect-parse-btn" class="submitbtn collect-parse-btn" type="button" style="background: #fa5af2;">⭐收藏这部剧⭐</button>
+            <div class="history-btn-box">
+                <button type="button" class="historybtn" id="historybtn" onclick="toggleHistory()">历史记录</button>
+                <button type="button" class="collectbtn" id="collectbtn" onclick="toggleCollect()">收藏夹</button>
+            </div>
         </form>
-        <button class="Officialbtn" id="Officialbtn">→</button>
+        <button class="Officialbtn" id="Officialbtn" onclick="toggleOfficial()">去平台</button>
     </div>
 
-
-    <div class="Official-card-box" id="Official-card-box" style="display: none;" onclick="isShow()">
-        <div class="Official-card" id="Official-card">
-            <a href="https://v.qq.com/" target="_blank">
-                <img src="https://v.qq.com/favicon.ico" alt=""><span>腾讯视频</span>
-            </a>
-            <a href="https://www.iqiyi.com/" target="_blank">
-                <img src="https://www.iqiyi.com/favicon.ico" alt=""><span>爱奇艺</span>
-            </a>
-            <a href="https://www.youku.com/" target="_blank">
-                <img src="https://www.youku.com/favicon.ico" alt=""><span>优酷</span>
-            </a>
-            <a href="https://www.mgtv.com/" target="_blank">
-                <img src="https://www.mgtv.com/favicon.ico" alt=""><span>芒果</span>
-            </a>
-            <a href="https://www.tudou.com/" target="_blank">
-                <img src="https://img.alicdn.com/tfs/TB1Pd4JZ.z1gK0jSZLeXXb9kVXa-32-32.png" alt=""><span>土豆</span>
-            </a>
-            <a href="https://www.miguvideo.com/" target="_blank">
-                <img src="https://www.miguvideo.com/favicon.ico" alt=""><span>咪咕</span>
-            </a>
-            <a href="https://www.bilibili.com/" target="_blank">
-                <img src="https://www.bilibili.com/favicon.ico" alt=""><span>哔哩哔哩</span>
-            </a>
+    <!-- 历史记录盒子 -->
+    <div class="history-card-box" id="history-card-box" style="display: none;" onclick="toggleHistory()">
+        <div class="history-card" id="history-card">
+            <div class="history-header">
+                <h3 style="color: #333; text-align: center; margin-bottom: 20px;">下边是宝宝看过的电视哦</h3>
+                <button class="clear-history-btn" onclick="event.stopPropagation(); clearHistory()">🗑️ 清空</button>
+            </div>
+            <div id="historyList"></div>
+        </div>
+    </div>
+    
+    <!-- 收藏夹盒子 -->
+    <div class="collect-card-box" id="collect-card-box" style="display: none;" onclick="toggleCollect()">
+        <div class="collect-card" id="collect-card">
+            <div class="history-header">
+                <h3 style="color: #333; text-align: center; margin-bottom: 20px;">收藏夹</h3>
+                <button class="clear-history-btn" onclick="event.stopPropagation(); clearCollect()">🗑️ 清空</button>
+            </div>
+            <div id="collectList"></div>
         </div>
     </div>
 
-    <script src="./js/script.js"></script>
+    <!-- 官方平台盒子 -->
+    <div class="Official-card-box" id="Official-card-box" style="display: none;" onclick="toggleOfficial()">
+        <div class="Official-card" id="Official-card">
+            <h3 style="color: #333; text-align: center; margin-bottom: 20px;">官方平台</h3>
+            <div id="OfficialList" class="OfficialList">
+                <a href="https://v.qq.com/" target="_blank">
+                    <img src="https://v.qq.com/favicon.ico" alt=""><span>腾讯视频</span>
+                </a>
+                <a href="https://www.iqiyi.com/" target="_blank">
+                    <img src="https://www.iqiyi.com/favicon.ico" alt=""><span>爱奇艺</span>
+                </a>
+                <a href="https://www.youku.com/" target="_blank">
+                    <img src="https://www.youku.com/favicon.ico" alt=""><span>优酷</span>
+                </a>
+                <a href="https://www.mgtv.com/" target="_blank">
+                    <img src="https://www.mgtv.com/favicon.ico" alt=""><span>芒果</span>
+                </a>
+                <a href="https://www.tudou.com/" target="_blank">
+                    <img src="https://img.alicdn.com/tfs/TB1Pd4JZ.z1gK0jSZLeXXb9kVXa-32-32.png" alt=""><span>土豆</span>
+                </a>
+                <a href="https://www.miguvideo.com/" target="_blank">
+                    <img src="https://www.miguvideo.com/favicon.ico" alt=""><span>咪咕</span>
+                </a>
+                <a href="https://www.bilibili.com/" target="_blank">
+                    <img src="https://www.bilibili.com/favicon.ico" alt=""><span>哔哩哔哩</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="./wenbao/js/script.js"></script>
 </body>
 
 </html>
